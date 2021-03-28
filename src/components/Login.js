@@ -33,36 +33,39 @@ const Login = () => {
       };
 
         fetch(SERVER_URL + "oauth/token", requestOptions)
+        .then(res => res.json())
         .then(res => {
-          const jwtToken = res.headers.get('Authorization');
-          if (jwtToken !== null) {
-            sessionStorage.setItem("jwt", jwtToken);
+
+          const accessToken = res.access_token;
+          const refreshToken = res.refresh_token;
+
+          if (accessToken !== null) {
+            sessionStorage.setItem("accessToken", accessToken);
+            sessionStorage.setItem("refreshToken",refreshToken);
             setAuth(true);
           }
           else {
-            toast.warn("Check your username and password", {
-              position: toast.POSITION.BOTTOM_LEFT
-            }) 
+            toast.warn("Check your username and password", {position: toast.POSITION.BOTTOM_LEFT}) 
           }
         })
         .catch(err => console.error(err)) 
       }  
 
-      if (isAuthenticated === true) {
-        return (<h1>YOU LOGGED</h1>)
-      }
-      else {
-        return (
-          <div>
-            <TextField name="username" label="Username" onChange={handleChange} /> <br/> 
-            <TextField type="password" name="password" label="Password" onChange={handleChange} /><br/><br/> 
-            <Button variant="outlined" color="primary"  onClick={login}>
-              Login
-            </Button>
-            <ToastContainer autoClose={1500} /> 
-          </div>
-        );
-      }
+    if (isAuthenticated === true) {
+      return (<h1>YOU LOGGED</h1>)
+    }
+    else {
+      return (
+        <div>
+          <TextField name="username" label="Username" onChange={handleChange} /> <br/> 
+          <TextField type="password" name="password" label="Password" onChange={handleChange} /><br/><br/> 
+          <Button variant="outlined" color="primary"  onClick={login}>
+            Login
+          </Button>
+          <ToastContainer autoClose={1500} /> 
+        </div>
+      );
+    }
 }
 
 export default Login;
