@@ -1,23 +1,20 @@
-import React from 'react';
+import React, { Component } from 'react';
+import logo from './logo.svg';
 import './App.css';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import Login from './components/Login';
-
-function App() {
-  return (
-    <div className="App">
-      <AppBar position="static" color="default">
-        <Toolbar>
-          <Typography variant="h6" color="inherit">
-            Gym Api
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Login />
-    </div>
-  );
+class App extends Component {
+  render() {
+    return (
+      <div className="App">
+        <header className="App-header">
+          <img src={logo} className="App-logo" alt="logo" />
+          <p>
+            Gym Admin
+          </p>
+          <Login/>
+        </header>
+      </div>
+    );
+  }
 }
-
 export default App;

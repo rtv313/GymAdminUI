@@ -4,16 +4,30 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { makeStyles } from '@material-ui/core/styles';
+import Menu from './Menu';
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    '& > *': {
+      margin: theme.spacing(1),
+      width: '25ch',
+    },
+  },
+  input: {
+    backgroundColor: theme.palette.common.white,
+  }
+}));
 
 const Login = () => {
+    const classes = useStyles();
     const [user, setUser] = useState({username: '', password: ''})
     const [isAuthenticated, setAuth] = useState(false);
 
     const handleChange = (event) => {
         setUser({...user, [event.target.name] : event.target.value})
     }
-
+    
     const login = () => {
       
       var myHeaders = new Headers();
@@ -52,18 +66,21 @@ const Login = () => {
       }  
 
     if (isAuthenticated === true) {
-      return (<h1>YOU LOGGED</h1>)
+      return (<Menu/>);
     }
     else {
       return (
-        <div>
-          <TextField name="username" label="Username" onChange={handleChange} /> <br/> 
-          <TextField type="password" name="password" label="Password" onChange={handleChange} /><br/><br/> 
-          <Button variant="outlined" color="primary"  onClick={login}>
+        <form className={classes.root}>
+          <TextField name="username" label="Username" onChange={handleChange} variant="outlined" InputProps={{className: classes.input }}  /> 
+          <br/> 
+          <TextField type="password" name="password" label="Password" onChange={handleChange} variant="outlined" color="primary" InputProps={{className: classes.input }} />
+          <br/>
+          <br/> 
+          <Button variant="contained" color="primary"  onClick={login}  >
             Login
           </Button>
           <ToastContainer autoClose={1500} /> 
-        </div>
+        </form>
       );
     }
 }
