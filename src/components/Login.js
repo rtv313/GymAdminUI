@@ -15,10 +15,24 @@ const Login = () => {
     }
 
     const login = () => {
-        fetch(SERVER_URL + '/oauth/token', {
-          method: 'POST',
-          body: JSON.stringify(user)
-        })
+      
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", "Basic cmVhY3RhcHA6MTIzNDU=");
+      myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+      var urlencoded = new URLSearchParams();
+      urlencoded.append("username", user.username);
+      urlencoded.append("password", user.password);
+      urlencoded.append("grant_type", "password");
+
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: urlencoded,
+        redirect: 'follow'
+      };
+
+        fetch(SERVER_URL + "oauth/token", requestOptions)
         .then(res => {
           const jwtToken = res.headers.get('Authorization');
           if (jwtToken !== null) {
