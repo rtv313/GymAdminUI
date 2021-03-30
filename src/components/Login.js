@@ -6,6 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { makeStyles } from '@material-ui/core/styles';
 import Menu from './Menu';
+import logo from '../logo.svg';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -49,17 +50,17 @@ const Login = () => {
         fetch(SERVER_URL + "oauth/token", requestOptions)
         .then(res => res.json())
         .then(res => {
-
+          const error = res.error;
           const accessToken = res.access_token;
           const refreshToken = res.refresh_token;
 
-          if (accessToken !== null) {
+          if (accessToken !== null && error !== 'invalid_grant') {
             sessionStorage.setItem("accessToken", accessToken);
             sessionStorage.setItem("refreshToken",refreshToken);
             setAuth(true);
           }
           else {
-            toast.warn("Check your username and password", {position: toast.POSITION.BOTTOM_LEFT}) 
+            toast.warn("Check your username and password", {position: toast.POSITION.BOTTOM_LEFT}); 
           }
         })
         .catch(err => console.error(err)) 
@@ -70,17 +71,23 @@ const Login = () => {
     }
     else {
       return (
-        <form className={classes.root}>
-          <TextField name="username" label="Username" onChange={handleChange} variant="outlined" InputProps={{className: classes.input }}  /> 
-          <br/> 
-          <TextField type="password" name="password" label="Password" onChange={handleChange} variant="outlined" color="primary" InputProps={{className: classes.input }} />
-          <br/>
-          <br/> 
-          <Button variant="contained" color="primary"  onClick={login}  >
-            Login
-          </Button>
-          <ToastContainer autoClose={1500} /> 
-        </form>
+        <header className="App-header">
+          <img src={logo} className="App-logo" alt="logo" />
+          <p>
+            Gym Admin
+          </p>
+          <form className={classes.root}>
+            <TextField name="username" label="Email" onChange={handleChange} variant="outlined" InputProps={{className: classes.input }} /> 
+            <br/> 
+            <TextField type="password" name="password" label="Password" onChange={handleChange} variant="outlined" color="primary" InputProps={{className: classes.input }} />
+            <br/>
+            <br/> 
+            <Button variant="contained" color="primary"  onClick={login}  >
+              Login
+            </Button>
+            <ToastContainer autoClose={1500} /> 
+          </form>
+        </header>
       );
     }
 }
