@@ -6,7 +6,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { makeStyles } from '@material-ui/core/styles';
 import Menu from './Menu';
-import Main from './main'
 import logo from '../logo.svg';
 
 const useStyles = makeStyles((theme) => ({
@@ -68,7 +67,7 @@ const Login = () => {
       }  
 
     if (isAuthenticated === true) {
-      return (<Main/>);
+      return (<Menu/>);
     }
     else {
       return (
