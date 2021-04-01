@@ -3,12 +3,15 @@ import '../App.css';
 import { BrowserRouter, Switch, Route, Link } from 'react-router-dom'
 import Contact from './Contact';
 import Home from './Home';
+import Logout from './Logout'
+import Login from './Login';
 
 function Menu() {
   return (
     <div className="App">
       <BrowserRouter>
         <div>
+          <Logout/>
           <Link to="/"><div><h1>Home</h1></div></Link>{' '}
           <Link to="/contact">Contact</Link>{' '} 
           <Link to="/links">Links</Link>{' '} 
