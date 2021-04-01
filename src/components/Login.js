@@ -29,7 +29,7 @@ const Login = () => {
         setUser({...user, [event.target.name] : event.target.value})
     }
     
-    const login = () => {
+    const login = () =>   {
       
       var myHeaders = new Headers();
       myHeaders.append("Authorization", "Basic cmVhY3RhcHA6MTIzNDU=");
@@ -47,24 +47,24 @@ const Login = () => {
         redirect: 'follow'
       };
 
-        fetch(SERVER_URL + "oauth/token", requestOptions)
-        .then(res => res.json())
-        .then(res => {
-          const error = res.error;
-          const accessToken = res.access_token;
-          const refreshToken = res.refresh_token;
+      fetch(SERVER_URL + "oauth/token", requestOptions)
+      .then(res => res.json())
+      .then(res => {
+        const error = res.error;
+        const accessToken = res.access_token;
+        const refreshToken = res.refresh_token;
 
-          if (accessToken !== null && error !== 'invalid_grant') {
-            sessionStorage.setItem("accessToken", accessToken);
-            sessionStorage.setItem("refreshToken",refreshToken);
-            setAuth(true);
-          }
-          else {
-            toast.warn("Check your username and password", {position: toast.POSITION.BOTTOM_LEFT}); 
-          }
-        })
-        .catch(err => console.error(err)) 
-      }  
+        if (accessToken !== null && error !== 'invalid_grant') {
+          sessionStorage.setItem("accessToken", accessToken);
+          sessionStorage.setItem("refreshToken",refreshToken);
+          setAuth(true);
+        }
+        else {
+          toast.warn("Check your username and password", {position: toast.POSITION.BOTTOM_LEFT}); 
+        }
+      })
+      .catch(err => console.error(err)) 
+    }  
 
     if (isAuthenticated === true) {
       return (<Menu/>);

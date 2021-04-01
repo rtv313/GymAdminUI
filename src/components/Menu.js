@@ -1,62 +1,30 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
+import '../App.css';
+import { BrowserRouter, Switch, Route, Link } from 'react-router-dom'
+import Contact from './Contact';
+import Home from './Home';
+import Logout from './Logout'
+import Login from './Login';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
-    background: 'gray'
-  },
-  paper: {
-    padding: theme.spacing(3),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-  },
-}));
-
-export default function Menu() {
-  const classes = useStyles();
-
+function Menu() {
   return (
-    <div className={classes.root} >
+    <div className="App">
+      <BrowserRouter>
         <div>
-        <AppBar position="static" color="default">
-        <Toolbar>
-            <Typography variant="h6" color="inherit">
-            Gym Admin 2
-            </Typography>
-        </Toolbar>
-        </AppBar>
+          <Logout/>
+          <Link to="/"><div><h1>Home</h1></div></Link>{' '}
+          <Link to="/contact">Contact</Link>{' '} 
+          <Link to="/links">Links</Link>{' '} 
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route path="/contact" component={Contact} />
+            <Route path="/links" render={() => <h1>Links</h1>} />
+            <Route render={() => <h1>Page not found</h1>} />
+          </Switch>
         </div>
-
-      <Grid container spacing={3} >
-        <Grid item xs={12}>
-          <Paper className={classes.paper}>xs=12</Paper>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <Paper className={classes.paper}>xs=12 sm=6</Paper>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <Paper className={classes.paper}>xs=12 sm=6</Paper>
-        </Grid>
-        <Grid item xs={6} sm={3}>
-          <Paper className={classes.paper}>xs=6 sm=3</Paper>
-        </Grid>
-        <Grid item xs={6} sm={3}>
-          <Paper className={classes.paper}>xs=6 sm=3</Paper>
-        </Grid>
-        <Grid item xs={6} sm={3}>
-          <Paper className={classes.paper}>xs=6 sm=3</Paper>
-        </Grid>
-        <Grid item xs={6} sm={3}>
-          <Paper className={classes.paper}>xs=6 sm=3</Paper>
-        </Grid>
-      </Grid>
+      </BrowserRouter> 
     </div>
   );
 }
+
+export default Menu;
