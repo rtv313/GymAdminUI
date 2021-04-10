@@ -5,7 +5,7 @@ import { Router,BrowserRouter, Switch, Route, Link } from 'react-router-dom'
 class Exercises extends React.Component{
 
   callParent = () => {
-    this.props.parentCallback();
+    this.props.parentCallback("/users","Users");
   };
 
   render(){

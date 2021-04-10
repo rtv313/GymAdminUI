@@ -13,16 +13,13 @@ class Menu extends React.Component {
     this.state = { links: [] };
   }
 
-  fillData = () => {
-    console.info("You clicked a breadcrumb.");
-    for (var i = 0; i < 3; i++) {
-      this.state.links.push(
-        <Link color="inherit" href="/">
-          <a href="#">{i + 1}</a>
-        </Link>
-      );
-      this.setState({ links: this.state.links });
-    }
+  fillData = (url,title) => {
+    this.state.links.push(
+      <Link to={url}>
+       {title}
+      </Link>
+    );
+    this.setState({ links: this.state.links });
   };
 
   render(){
