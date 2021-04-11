@@ -1,6 +1,6 @@
 import React from 'react';
-import Users from './Users';
-import { Router,BrowserRouter, Switch, Route, Link } from 'react-router-dom'
+import {Link} from 'react-router-dom'
+import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 
 class Exercises extends React.Component{
 
@@ -11,12 +11,12 @@ class Exercises extends React.Component{
   render(){
     return (
       <div>
-        <button type="button" onClick={this.callParent}>
-          Call Parent
-        </button>
+         <Breadcrumbs>
+          <Link to=""><h1>Home</h1></Link>
+          <Link to="/exercises"><h1>Exercises</h1></Link>
+         </Breadcrumbs>
+
         <h1>Exercises.js</h1>
-        <Link to="/users"><h1>click users</h1></Link>{' '}
-        <Route path="/users" component={Users} />
       </div>
     );
   }

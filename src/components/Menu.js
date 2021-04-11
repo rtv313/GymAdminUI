@@ -1,49 +1,33 @@
 import React from 'react';
 import '../App.css';
-import { Router,BrowserRouter, Switch, Route, Link } from 'react-router-dom'
+import { BrowserRouter, Switch, Route, Link } from 'react-router-dom'
 import Exercises from './Exercises';
-import Logout from './Logout'
 import Users from './Users';
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
+import User from './User';
+import RoutineByMonth from './RoutineByMonth'
+import RoutineByDay from './RoutineByDay'
+import Home from './Home';
 
 class Menu extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { links: [] };
   }
 
-  fillData = (url,title) => {
-    this.state.links.push(
-      <Link to={url}>
-       {title}
-      </Link>
-    );
-    this.setState({ links: this.state.links });
-  };
 
   render(){
-    
     return (
       <div className="App">
-        <BrowserRouter>
+       <BrowserRouter>
           <div>
-            <Logout/>
-            <p>###############################################</p>
-            <button type="button" onClick={this.fillData}>
-              Fill Data
-            </button>
-            <Link to="/"><h1>Exercises</h1></Link>{' '}
-            <Link to="/users"><h1>Users</h1></Link>{' '} 
-            <Breadcrumbs aria-label="breadcrumb">{this.state.links}</Breadcrumbs>
-            <p>###############################################</p>
-
             <Switch>
-              <Route exact path="/" component={() => <Exercises parentCallback = {this.fillData} />} />
-              <Route path="/users" component={Users} />
-              <Route render={() => <h1>Page not found</h1>} />
+              <Route path="/exercises" component={() => <Exercises/>} />
+              <Route path="/users" component={() => <Users/>} />
+              <Route path="/user/:p1" component={User} />
+              <Route path="/routineByMonth" component={RoutineByMonth} />
+              <Route path="/routineByDay" component={RoutineByDay} />
+              <Route path="" component={Home} />
             </Switch>
-
           </div>
         </BrowserRouter> 
       </div>
