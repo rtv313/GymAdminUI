@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
+import Menu from './components/Menu';
 import Login from './components/Login';
 class App extends Component {
   render() {

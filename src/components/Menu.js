@@ -2,26 +2,37 @@ import React from 'react';
 import '../App.css';
 import { BrowserRouter, Switch, Route, Link } from 'react-router-dom'
 import Exercises from './Exercises';
-import Logout from './Logout'
 import Users from './Users';
+import User from './User';
+import RoutineByMonth from './RoutineByMonth'
+import RoutineByDay from './RoutineByDay'
+import Home from './Home';
 
-function Menu() {
-  return (
-    <div className="App">
-      <BrowserRouter>
-        <div>
-          <Logout/>
-          <Link to="/"><h1>Exercises</h1></Link>{' '}
-          <Link to="/users"><h1>Users</h1></Link>{' '} 
-          <Switch>
-            <Route exact path="/" component={Exercises} />
-            <Route path="/users" component={Users} />
-            <Route render={() => <h1>Page not found</h1>} />
-          </Switch>
-        </div>
-      </BrowserRouter> 
-    </div>
-  );
+class Menu extends React.Component {
+
+  constructor(props) {
+    super(props);
+  }
+
+
+  render(){
+    return (
+      <div className="App">
+       <BrowserRouter>
+          <div>
+            <Switch>
+              <Route path="/exercises" component={() => <Exercises/>} />
+              <Route path="/users" component={() => <Users/>} />
+              <Route path="/user/:p1" component={User} />
+              <Route path="/routineByMonth" component={RoutineByMonth} />
+              <Route path="/routineByDay" component={RoutineByDay} />
+              <Route path="" component={Home} />
+            </Switch>
+          </div>
+        </BrowserRouter> 
+      </div>
+    );
+  }
 }
 
 export default Menu;
