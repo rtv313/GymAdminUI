@@ -9,6 +9,9 @@ const useStyles = makeStyles((theme) => ({
       marginLeft: theme.spacing(3),
       marginRight: theme.spacing(1),
     },
+    bar:{
+      marginTop:theme.spacing(3),
+    }
   }));
 
 
@@ -23,8 +26,8 @@ const Logout = () => {
       }  
 
   return (
-    <AppBar position="static" color="default">
-        <Toolbar>
+    <AppBar position="static" color="default" className={classes.bar}>
+        <Toolbar  >
             <Button variant="contained" color="primary"  onClick={logout}>
                 Logout
             </Button>
