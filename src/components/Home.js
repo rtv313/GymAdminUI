@@ -21,7 +21,7 @@ class Home extends React.Component {
     return (
       <div className="App">
         <CssBaseline />
-        <Container maxWidth="md">
+        <Container>
           <Logout />
           <List
             component="nav"
