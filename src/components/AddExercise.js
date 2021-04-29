@@ -37,7 +37,15 @@ const AddExercise = (props) => {
 
   const handleClose = () => {
     setOpen(false);
+    resetForm(false);
+  };
 
+  const handleChange = (event) => {
+    setExercise({ ...exercise, [event.target.name]: event.target.value });
+    resetForm(true);
+  };
+
+  const resetForm = (comeHandleChange) =>{
     setValidName(false);
     setErrorNameMessage("");
 
@@ -52,12 +60,11 @@ const AddExercise = (props) => {
 
     setValidBodyPart(false);
     setErrorBodyPartMessage("");
-  };
 
-  const handleChange = (event) => {
-    setExercise({ ...exercise, [event.target.name]: event.target.value });
-    validateData();
-  };
+    if(comeHandleChange != true){
+      setExercise({"name":"","imageUrl":"","description":"","videoUrl":"","bodyPart":""});
+    }
+  }
 
   const validateData = () => {
     var valid = true;
@@ -70,7 +77,7 @@ const AddExercise = (props) => {
       setErrorNameMessage("");
     }
 
-    if (exercise.imageUrl == "") {
+    if (exercise.imageUrl === "") {
       setValidImageUrl(true);
       setErrorImageUrlMessage("This field cannot be empty");
       valid = false;
@@ -79,7 +86,7 @@ const AddExercise = (props) => {
       setErrorImageUrlMessage("");
     }
 
-    if (exercise.description == "") {
+    if (exercise.description === "") {
       setValidDescription(true);
       setErrorDescriptionMessage("This field cannot be empty");
       valid = false;
@@ -88,7 +95,7 @@ const AddExercise = (props) => {
       setErrorDescriptionMessage("");
     }
 
-    if (exercise.videoUrl == "") {
+    if (exercise.videoUrl === "") {
       setValidVideoUrl(true);
       setErrorVideoUrlMessage("This field cannot be empty");
       valid = false;
@@ -97,7 +104,7 @@ const AddExercise = (props) => {
       setErrorVideoUrlMessage("");
     }
 
-    if (exercise.bodyPart == "") {
+    if (exercise.bodyPart === "") {
       setValidBodyPart(true);
       setErrorBodyPartMessage("This field cannot be empty");
       valid = false;
@@ -115,7 +122,7 @@ const AddExercise = (props) => {
       props.addExercise(exercise);
       handleClose();
     }else{
-      alert("Not valid data");
+      
     }
   };
 
