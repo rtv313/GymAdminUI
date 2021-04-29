@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import "react-table-6/react-table.css";
 import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from 'react-toastify';
 import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
 import Logout from "./Logout";
@@ -83,9 +84,7 @@ class Exercises extends React.Component {
 
   // Add new exercise
   addExercise(exercise) {
-
-    alert("add exercise");
-
+    
     const token = "Bearer " + sessionStorage.getItem("accessToken");
     var myHeaders = new Headers();
     myHeaders.append("Authorization", token);
@@ -101,10 +100,19 @@ class Exercises extends React.Component {
     };
 
     fetch(SERVER_URL + "api/exercises/", requestOptions)
-      .then((response) => response.text())
+      .then((response) => {
+        if(response.status != 201){
+          toast.warn("Cannot create exercise", {position: toast.POSITION.BOTTOM_LEFT}); 
+        }else{
+          toast.success("Exercise created", {position: toast.POSITION.BOTTOM_LEFT}); 
+        }
+        return response.text();
+      })
       .then((result) => console.log(result))
       .then(res => this.fetchExercises())
-      .catch((error) => console.log("error", error));
+      .catch((error) => {
+        console.log("error", error);
+      });
   }
 
   render() {
@@ -135,6 +143,7 @@ class Exercises extends React.Component {
           </div>
         </Container>
         <br />
+        <ToastContainer autoClose={1500} /> 
       </div>
     );
   }

@@ -121,8 +121,6 @@ const AddExercise = (props) => {
     if(validateData()){
       props.addExercise(exercise);
       handleClose();
-    }else{
-      
     }
   };
 
