@@ -135,7 +135,14 @@ class Exercises extends React.Component {
     };
     
     fetch(SERVER_URL + "api/exercises/" + exerciseId, requestOptions)
-      .then(response => response.text())
+      .then((response) => {
+        if(response.status != 200){
+          toast.warn("Cannot delete exercise", {position: toast.POSITION.BOTTOM_LEFT}); 
+        }else{
+          toast.success("Exercise deleted", {position: toast.POSITION.BOTTOM_LEFT}); 
+        }
+        return response.text();
+      })
       .then(result => console.log(result))
       .then(res => this.fetchExercises())
       .catch(error => console.log('error', error));
