@@ -35,14 +35,20 @@ class Exercises extends React.Component {
     },
     {
       field: "delete",
+      disableClickEventBubbling: true,
       headerName: "Delete",
       description: "This column has a value getter and is not sortable.",
       sortable: false,
       width: 160,
       renderCell: (params) => {
+
+        const onClick = () => {
+          this.deleteExercise(params.getValue("id"));
+         };
+   
         return (
-          <Button variant="contained" color="secondary">
-            Delete{" "}
+          <Button variant="contained" color="secondary" onClick={onClick}>
+            Delete
           </Button>
         );
       },
@@ -113,6 +119,33 @@ class Exercises extends React.Component {
       .catch((error) => {
         console.log("error", error);
       });
+  }
+
+  deleteExercise(exerciseId){
+
+    const token = "Bearer " + sessionStorage.getItem("accessToken");
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", token);
+    myHeaders.append("Content-Type", "application/json");
+
+    var requestOptions = {
+      method: 'DELETE',
+      headers: myHeaders,
+      redirect: 'follow'
+    };
+    
+    fetch(SERVER_URL + "api/exercises/" + exerciseId, requestOptions)
+      .then((response) => {
+        if(response.status != 200){
+          toast.warn("Cannot delete exercise", {position: toast.POSITION.BOTTOM_LEFT}); 
+        }else{
+          toast.success("Exercise deleted", {position: toast.POSITION.BOTTOM_LEFT}); 
+        }
+        return response.text();
+      })
+      .then(result => console.log(result))
+      .then(res => this.fetchExercises())
+      .catch(error => console.log('error', error));
   }
 
   render() {
