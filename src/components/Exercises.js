@@ -1,6 +1,6 @@
 import React from "react";
 import { SERVER_URL } from "./Constants.js";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import "react-table-6/react-table.css";
 import "react-toastify/dist/ReactToastify.css";
@@ -8,6 +8,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
 import Logout from "./Logout";
+import EditExercise from "./EditExercise"
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { DataGrid } from "@material-ui/data-grid";
 import AddExercise from "./AddExercise";
@@ -27,9 +28,7 @@ class Exercises extends React.Component {
       width: 160,
       renderCell: (params) => {
         return (
-          <Button variant="contained" color="primary">
-            Edit{" "}
-          </Button>
+          <EditExercise id={params.getValue("id")} fetchExercises={this.fetchExercises}/>
         );
       },
     },
