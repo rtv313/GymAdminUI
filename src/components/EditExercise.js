@@ -4,7 +4,7 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 
@@ -71,32 +71,32 @@ const EditExercise = (props) => {
   
     const handleChange = (event) => {
       setExercise({ ...exercise, [event.target.name]: event.target.value });
-      removeFormErrors();
+      removeFormErrors(event.target.name);
     };
 
-    const removeFormErrors = () =>{
+    const removeFormErrors = (targetName) =>{
         
-        if (exercise.name != "") {
+        if (targetName === "name") {
             setValidName(false);
             setErrorNameMessage("");
         }
 
-        if (exercise.imageUrl != "") {
+        if (targetName === "imageUrl") {
             setValidImageUrl(false);
             setErrorImageUrlMessage("");
         }
 
-        if (exercise.description != "") {
+        if (targetName === "description") {
             setValidDescription(false);
             setErrorDescriptionMessage("");
         }
 
-        if (exercise.videoUrl != "") {
+        if (targetName === "videoUrl") {
             setValidVideoUrl(false);
             setErrorVideoUrlMessage("");
         }
 
-        if (exercise.bodyPart != "") {
+        if (targetName === "bodyPart") {
             setValidBodyPart(false);
             setErrorBodyPartMessage("");
         }
