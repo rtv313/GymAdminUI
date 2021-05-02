@@ -1,6 +1,6 @@
 import React from "react";
 import { SERVER_URL } from "./Constants.js";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import "react-table-6/react-table.css";
 import "react-toastify/dist/ReactToastify.css";
@@ -28,7 +28,7 @@ class Exercises extends React.Component {
       width: 160,
       renderCell: (params) => {
         return (
-          <EditExercise/>
+          <EditExercise id={params.getValue("id")} fetchExercises={this.fetchExercises}/>
         );
       },
     },

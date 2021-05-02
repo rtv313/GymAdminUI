@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { SERVER_URL } from "./Constants.js";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import { ToastContainer, toast } from 'react-toastify';
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 
@@ -30,9 +32,37 @@ const EditExercise = (props) => {
   
     const [validBodyPart, setValidBodyPart] = useState(false);
     const [errorBodyPartMessage, setErrorBodyPartMessage] = useState("");
+
+    const getExerciseData = (id) => {
+
+        const token = "Bearer " + sessionStorage.getItem("accessToken");
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", token);
+        myHeaders.append("Content-Type", "application/json");
+
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        };
+
+        fetch(SERVER_URL + "api/exercises/" + id, requestOptions)
+        .then((response) => {
+            if(response.status != 200){
+            toast.warn("Cannot get exercise", {position: toast.POSITION.BOTTOM_LEFT}); 
+            }else{
+            toast.success("Get exercise data succesfully", {position: toast.POSITION.BOTTOM_LEFT}); 
+            }
+            return response;
+        })
+        .then((response) => response.json())
+        .then((responseData) => {setExercise(responseData);})
+        .catch((error) => {console.log("error", error);});
+    }
   
     const handleClickOpen = () => {
       setOpen(true);
+      getExerciseData(props.id);
     };
   
     const handleClose = () => {
@@ -41,7 +71,36 @@ const EditExercise = (props) => {
   
     const handleChange = (event) => {
       setExercise({ ...exercise, [event.target.name]: event.target.value });
+      removeFormErrors();
     };
+
+    const removeFormErrors = () =>{
+        
+        if (exercise.name != "") {
+            setValidName(false);
+            setErrorNameMessage("");
+        }
+
+        if (exercise.imageUrl != "") {
+            setValidImageUrl(false);
+            setErrorImageUrlMessage("");
+        }
+
+        if (exercise.description != "") {
+            setValidDescription(false);
+            setErrorDescriptionMessage("");
+        }
+
+        if (exercise.videoUrl != "") {
+            setValidVideoUrl(false);
+            setErrorVideoUrlMessage("");
+        }
+
+        if (exercise.bodyPart != "") {
+            setValidBodyPart(false);
+            setErrorBodyPartMessage("");
+        }
+    }
   
     const validateData = () => {
       var valid = true;
@@ -96,7 +155,34 @@ const EditExercise = (props) => {
     // Save exercise
     const handleSave = () => {
       if(validateData()){
-        props.addExercise(exercise);
+        const token = "Bearer " + sessionStorage.getItem("accessToken");
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", token);
+        myHeaders.append("Content-Type", "application/json");
+
+        var raw = JSON.stringify(exercise);
+
+        var requestOptions = {
+            method: 'PUT',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+          };
+
+        fetch(SERVER_URL + "api/exercises/" + props.id, requestOptions)
+        .then((response) => {
+            if(response.status != 201){
+            toast.warn("Cannot edit exercise", {position: toast.POSITION.BOTTOM_LEFT}); 
+            }else{
+            toast.success("Exercise edited", {position: toast.POSITION.BOTTOM_LEFT}); 
+            }
+            return response.text();
+        })
+        .then((result) => console.log(result))
+        .then(res => props.fetchExercises())
+        .catch((error) => {
+            console.log("error", error);
+        });
         handleClose();
       }
     };
@@ -104,7 +190,7 @@ const EditExercise = (props) => {
     return (
       <div>
         <Button
-          variant="outlined"
+          variant="contained"
           color="primary"
           style={{ margin: 10 }}
           onClick={handleClickOpen}
@@ -162,7 +248,7 @@ const EditExercise = (props) => {
               helperText={errorBodyPartMessage}
             />
           </DialogContent>
-          
+
           <DialogActions>
             <Button color="secondary" onClick={handleClose}>
               Cancel
