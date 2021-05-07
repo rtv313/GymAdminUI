@@ -16,7 +16,23 @@ import AddExercise from "./AddExercise";
 class Exercises extends React.Component {
   columnsExercises = [
     { field: "name", headerName: "Name", width: 130 },
-    { field: "imageUrl", headerName: "Image", width: 130 },
+    { field: "imageUrl", 
+      headerName: "Image", 
+      width: 130,
+      renderCell: (params) => {
+
+        const onClick = (event) => {
+          alert("Abrir imagen " + params.getValue("imageUrl"));
+          event.preventDefault();
+         };
+
+        return (
+          <div>
+            <a href="url" onClick={onClick}>{params.getValue("imageUrl")}</a>
+          </div>
+        );
+      } 
+    },
     { field: "description", headerName: "Description", width: 130 },
     { field: "videoUrl", headerName: "Video", width: 90 },
     { field: "bodyPart", headerName: "Body Part", width: 190 },
