@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
 
 const EditExerciseImage = (props) => {
     const [open, setOpen] = useState(false);
@@ -44,15 +45,14 @@ const EditExerciseImage = (props) => {
         <Dialog open={open} onClose={handleClose}>
           <DialogTitle>Edit Image</DialogTitle>
           <DialogContent>
-
-            <TextField
-              fullWidth
-              label="Body Part"
-              name="bodyPart"
-              onChange={handleChange}
-            />
-            
-            <img src="https://pngimg.com/uploads/Half-Life/Half-Life_PNG76.png" width="150" height="150"></img>
+            <Grid container spacing={3} align = "center" justify = "center" alignItems = "center">
+                <Grid item xs={12}>
+                    <Paper>Exercise Image</Paper>
+                </Grid>
+                <Grid item xs={12}>
+                    <img src="https://pngimg.com/uploads/Half-Life/Half-Life_PNG76.png" alt="Girl in a jacket" width="300" height="300"/>
+                </Grid>
+            </Grid>
           </DialogContent>
 
           <DialogActions>
