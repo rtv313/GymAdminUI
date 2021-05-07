@@ -12,23 +12,18 @@ import EditExercise from "./EditExercise"
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { DataGrid } from "@material-ui/data-grid";
 import AddExercise from "./AddExercise";
+import EditExerciseImage from "./EditExerciseImage"
 
 class Exercises extends React.Component {
   columnsExercises = [
     { field: "name", headerName: "Name", width: 130 },
     { field: "imageUrl", 
       headerName: "Image", 
-      width: 130,
+      width: 160,
       renderCell: (params) => {
-
-        const onClick = (event) => {
-          alert("Abrir imagen " + params.getValue("imageUrl"));
-          event.preventDefault();
-         };
-
         return (
           <div>
-            <a href="url" onClick={onClick}>{params.getValue("imageUrl")}</a>
+            <EditExerciseImage id={params.getValue("id")} url={params.getValue("imageUrl")}/>
           </div>
         );
       } 
