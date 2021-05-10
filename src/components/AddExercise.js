@@ -61,14 +61,14 @@ const AddExercise = (props) => {
     setValidBodyPart(false);
     setErrorBodyPartMessage("");
 
-    if(comeHandleChange != true){
+    if(comeHandleChange !== true){
       setExercise({"name":"","imageUrl":"","description":"","videoUrl":"","bodyPart":""});
     }
   }
 
   const validateData = () => {
     var valid = true;
-    if (exercise.name == "") {
+    if (exercise.name === "") {
       setValidName(true);
       setErrorNameMessage("This field cannot be empty");
       valid = false;

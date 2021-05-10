@@ -23,7 +23,7 @@ class Exercises extends React.Component {
       renderCell: (params) => {
         return (
           <div>
-            <EditExerciseImage id={params.getValue("id")} url={params.getValue("imageUrl")}/>
+            <EditExerciseImage id={params.getValue("id")} url={params.getValue("imageUrl")} fetchExercises={this.fetchExercises}/>
           </div>
         );
       } 
@@ -117,7 +117,7 @@ class Exercises extends React.Component {
 
     fetch(SERVER_URL + "api/exercises/", requestOptions)
       .then((response) => {
-        if(response.status != 201){
+        if(response.status !== 201){
           toast.warn("Cannot create exercise", {position: toast.POSITION.BOTTOM_LEFT}); 
         }else{
           toast.success("Exercise created", {position: toast.POSITION.BOTTOM_LEFT}); 
@@ -146,7 +146,7 @@ class Exercises extends React.Component {
     
     fetch(SERVER_URL + "api/exercises/" + exerciseId, requestOptions)
       .then((response) => {
-        if(response.status != 200){
+        if(response.status !== 200){
           toast.warn("Cannot delete exercise", {position: toast.POSITION.BOTTOM_LEFT}); 
         }else{
           toast.success("Exercise deleted", {position: toast.POSITION.BOTTOM_LEFT}); 
