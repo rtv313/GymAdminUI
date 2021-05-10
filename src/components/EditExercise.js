@@ -48,7 +48,7 @@ const EditExercise = (props) => {
 
         fetch(SERVER_URL + "api/exercises/" + id, requestOptions)
         .then((response) => {
-            if(response.status != 200){
+            if(response.status !== 200){
             toast.warn("Cannot get exercise", {position: toast.POSITION.BOTTOM_LEFT}); 
             }else{
             toast.success("Get exercise data succesfully", {position: toast.POSITION.BOTTOM_LEFT}); 
@@ -104,7 +104,7 @@ const EditExercise = (props) => {
   
     const validateData = () => {
       var valid = true;
-      if (exercise.name == "") {
+      if (exercise.name === "") {
         setValidName(true);
         setErrorNameMessage("This field cannot be empty");
         valid = false;
@@ -171,7 +171,7 @@ const EditExercise = (props) => {
 
         fetch(SERVER_URL + "api/exercises/" + props.id, requestOptions)
         .then((response) => {
-            if(response.status != 201){
+            if(response.status !== 201){
             toast.warn("Cannot edit exercise", {position: toast.POSITION.BOTTOM_LEFT}); 
             }else{
             toast.success("Exercise edited", {position: toast.POSITION.BOTTOM_LEFT}); 

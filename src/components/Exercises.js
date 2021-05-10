@@ -12,23 +12,18 @@ import EditExercise from "./EditExercise"
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { DataGrid } from "@material-ui/data-grid";
 import AddExercise from "./AddExercise";
+import EditExerciseImage from "./EditExerciseImage"
 
 class Exercises extends React.Component {
   columnsExercises = [
     { field: "name", headerName: "Name", width: 130 },
     { field: "imageUrl", 
       headerName: "Image", 
-      width: 130,
+      width: 160,
       renderCell: (params) => {
-
-        const onClick = (event) => {
-          alert("Abrir imagen " + params.getValue("imageUrl"));
-          event.preventDefault();
-         };
-
         return (
           <div>
-            <a href="url" onClick={onClick}>{params.getValue("imageUrl")}</a>
+            <EditExerciseImage id={params.getValue("id")} url={params.getValue("imageUrl")} fetchExercises={this.fetchExercises}/>
           </div>
         );
       } 
@@ -122,7 +117,7 @@ class Exercises extends React.Component {
 
     fetch(SERVER_URL + "api/exercises/", requestOptions)
       .then((response) => {
-        if(response.status != 201){
+        if(response.status !== 201){
           toast.warn("Cannot create exercise", {position: toast.POSITION.BOTTOM_LEFT}); 
         }else{
           toast.success("Exercise created", {position: toast.POSITION.BOTTOM_LEFT}); 
@@ -151,7 +146,7 @@ class Exercises extends React.Component {
     
     fetch(SERVER_URL + "api/exercises/" + exerciseId, requestOptions)
       .then((response) => {
-        if(response.status != 200){
+        if(response.status !== 200){
           toast.warn("Cannot delete exercise", {position: toast.POSITION.BOTTOM_LEFT}); 
         }else{
           toast.success("Exercise deleted", {position: toast.POSITION.BOTTOM_LEFT}); 
