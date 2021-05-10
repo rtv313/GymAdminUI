@@ -57,7 +57,7 @@ const EditExerciseImage = (props) => {
         return response.text();
       })
       .then((result) => console.log(result))
-      .then(res => props.fetchExercises())
+      .then((res) => props.fetchExercises())
       .catch((error) => console.log("error", error));
 
     handleClose();
