@@ -12,16 +12,20 @@ import Paper from "@material-ui/core/Paper";
 import Logout from "./Logout";
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, toast } from "react-toastify";
 import { DataGrid } from "@material-ui/data-grid";
 
 class Users extends React.Component {
-
   columnsUsers = [
     { field: "email", headerName: "Email", width: 190 },
     { field: "name", headerName: "Name", width: 180 },
     { field: "lastname", headerName: "Lastname", width: 180 },
-    { field: "roles", headerName: "Role", width: 180,valueFormatter:  (params) => params.getValue("roles")[0].name},
+    {
+      field: "roles",
+      headerName: "Role",
+      width: 180,
+      valueFormatter: (params) => params.getValue("roles")[0].name,
+    },
   ];
 
   constructor(props) {
@@ -34,10 +38,10 @@ class Users extends React.Component {
   }
 
   // Cleans the nested data because filter cant work with nested data
-  setRole = (value) =>{
+  setRole = (value) => {
     value.roles = value.roles[0].name;
     return value;
-  }
+  };
 
   // Fetch all users
   fetchUsers = () => {
@@ -56,15 +60,11 @@ class Users extends React.Component {
     fetch(SERVER_URL + "api/users/", requestOptions)
       .then((response) => response.json())
       .then((responseData) => {
-        this.setState({users: responseData,});
+        this.setState({ users: responseData });
         this.state.users.map(this.setRole);
       })
       .catch((err) => console.error(err));
-
-      
   };
-
-  
 
   render() {
     return (
@@ -83,10 +83,10 @@ class Users extends React.Component {
           <h1>Users</h1>
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
-                rows={this.state.users}
-                columns={this.columnsUsers}
-                pageSize={15}
-              />
+              rows={this.state.users}
+              columns={this.columnsUsers}
+              pageSize={15}
+            />
           </div>
         </Container>
         <br />
