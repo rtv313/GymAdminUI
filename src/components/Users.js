@@ -33,6 +33,12 @@ class Users extends React.Component {
     this.fetchUsers();
   }
 
+  // Cleans the nested data because filter cant work with nested data
+  setRole = (value) =>{
+    value.roles = value.roles[0].name;
+    return value;
+  }
+
   // Fetch all users
   fetchUsers = () => {
     // Read the token from the session storage
@@ -50,12 +56,15 @@ class Users extends React.Component {
     fetch(SERVER_URL + "api/users/", requestOptions)
       .then((response) => response.json())
       .then((responseData) => {
-        this.setState({
-          users: responseData,
-        });
+        this.setState({users: responseData,});
+        this.state.users.map(this.setRole);
       })
       .catch((err) => console.error(err));
+
+      
   };
+
+  
 
   render() {
     return (
