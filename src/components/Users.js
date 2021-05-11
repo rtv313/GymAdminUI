@@ -21,6 +21,7 @@ class Users extends React.Component {
     { field: "email", headerName: "Email", width: 190 },
     { field: "name", headerName: "Name", width: 180 },
     { field: "lastname", headerName: "Lastname", width: 180 },
+    { field: "roles", headerName: "Role", width: 180,valueFormatter:  (params) => params.getValue("roles")[0].name},
   ];
 
   constructor(props) {
