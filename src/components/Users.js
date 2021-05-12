@@ -14,13 +14,14 @@ import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { ToastContainer, toast } from "react-toastify";
 import { DataGrid } from "@material-ui/data-grid";
+import AddUser from "./AddUser";
 
 class Users extends React.Component {
   columnsUsers = [
     { field: "email", headerName: "Email", width: 190 },
     { field: "name", headerName: "Name", width: 180 },
     { field: "lastname", headerName: "Lastname", width: 180 },
-    {field: "roles",headerName: "Role",width: 180,},
+    { field: "roles", headerName: "Role", width: 180 },
   ];
 
   constructor(props) {
@@ -76,6 +77,7 @@ class Users extends React.Component {
             </Link>
           </Breadcrumbs>
           <h1>Users</h1>
+          <AddUser/>
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
               rows={this.state.users}
