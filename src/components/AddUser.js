@@ -91,11 +91,11 @@ const AddUser = (props) => {
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Add User</DialogTitle>
         <DialogContent>
-          <TextField autoFocus fullWidth label="Email" name="email" />
+          <TextField autoFocus fullWidth label="Email" name="email" onChange={handleChange} />
 
-          <TextField autoFocus fullWidth label="Name" name="name" />
+          <TextField autoFocus fullWidth label="Name" name="name" onChange={handleChange} />
 
-          <TextField autoFocus fullWidth label="Lastname" name="lastname" />
+          <TextField autoFocus fullWidth label="Lastname" name="lastname" onChange={handleChange}/>
 
           <TextField
             type="password"
@@ -103,6 +103,7 @@ const AddUser = (props) => {
             fullWidth
             label="Password"
             name="password"
+            onChange={handleChange}
           />
 
           <TextField
@@ -111,6 +112,7 @@ const AddUser = (props) => {
             fullWidth
             label="Repeat password"
             name="repeatPassword"
+            onChange={handleChange}
           />
 
           <p>Role:</p>
