@@ -75,10 +75,19 @@ const AddUser = (props) => {
       redirect: "follow",
     };
 
+
+    var errorFlag = false;
     fetch(SERVER_URL + "api/users/", requestOptions)
       .then((response) => {
-        if (response.status !== 201) {
-          toast.warn("Error creating user", {
+        if(response.status !== 201){
+          errorFlag = true;
+        }
+        return response;
+      })
+      .then((response) => response.json())
+      .then((responseData) => {
+        if (errorFlag === true) {
+          toast.warn(responseData.message, {
             position: toast.POSITION.BOTTOM_LEFT,
           });
         } else {
@@ -86,10 +95,8 @@ const AddUser = (props) => {
             position: toast.POSITION.BOTTOM_LEFT,
           });
         }
-        return response.text();
       })
-      .then((result) => console.log(result))
-      .then((res) => props.fetchUsers())
+      .then(props.fetchUsers())
       .catch((error) => {
         console.log("error", error);
       });
