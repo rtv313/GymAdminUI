@@ -82,7 +82,7 @@ class Users extends React.Component {
             <DataGrid
               rows={this.state.users}
               columns={this.columnsUsers}
-              pageSize={15}
+              pageSize={50}
             />
           </div>
         </Container>

@@ -8,13 +8,16 @@ import { toast } from "react-toastify";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Select from "@material-ui/core/Select";
-import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
+
+var ROLE_COACH = "ROLE_COACH";
+var ROLE_ADMIN = "ROLE_ADMIN";
+var ROLE_USER = "ROLE_USER";
 
 const AddUser = (props) => {
   const [open, setOpen] = useState(false);
-  const [role, setRole] = React.useState('ROLE_USER');
+  const [role, setRole] = useState(ROLE_USER);
+  const [roleId, setRoleId] = useState(1);
   const [user, setUser] = useState({
     email: "",
     name: "",
@@ -24,7 +27,6 @@ const AddUser = (props) => {
 
   const handleClickOpen = () => {
     setOpen(true);
-    //getExerciseData(props.id);
   };
 
   const handleClose = () => {
@@ -37,8 +39,21 @@ const AddUser = (props) => {
 
   const handleRoleChange = (event) => {
     setRole(event.target.value);
-  };
 
+    switch (event.target.value) {
+      case ROLE_COACH:
+        setRoleId(2);
+        setRole(ROLE_COACH);
+        break;
+      case ROLE_ADMIN:
+        setRoleId(3);
+        setRole(ROLE_ADMIN);
+        break;
+      default:
+        setRoleId(1);
+        setRole(ROLE_USER);
+    }
+  };
 
   // Save user
   const handleSave = () => {
@@ -47,6 +62,10 @@ const AddUser = (props) => {
     myHeaders.append("Authorization", token);
     myHeaders.append("Content-Type", "application/json");
 
+    var nestedRole = new Object();
+    nestedRole.id = roleId;
+    nestedRole.name = role;
+    user.roles = [nestedRole];
     var raw = JSON.stringify(user);
 
     var requestOptions = {
@@ -59,11 +78,11 @@ const AddUser = (props) => {
     fetch(SERVER_URL + "api/users/", requestOptions)
       .then((response) => {
         if (response.status !== 201) {
-          toast.warn(response.message, {
+          toast.warn("Error creating user", {
             position: toast.POSITION.BOTTOM_LEFT,
           });
         } else {
-          toast.success(response.message, {
+          toast.success("User Created", {
             position: toast.POSITION.BOTTOM_LEFT,
           });
         }
@@ -91,11 +110,29 @@ const AddUser = (props) => {
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Add User</DialogTitle>
         <DialogContent>
-          <TextField autoFocus fullWidth label="Email" name="email" onChange={handleChange} />
+          <TextField
+            autoFocus
+            fullWidth
+            label="Email"
+            name="email"
+            onChange={handleChange}
+          />
 
-          <TextField autoFocus fullWidth label="Name" name="name" onChange={handleChange} />
+          <TextField
+            autoFocus
+            fullWidth
+            label="Name"
+            name="name"
+            onChange={handleChange}
+          />
 
-          <TextField autoFocus fullWidth label="Lastname" name="lastname" onChange={handleChange}/>
+          <TextField
+            autoFocus
+            fullWidth
+            label="Lastname"
+            name="lastname"
+            onChange={handleChange}
+          />
 
           <TextField
             type="password"
@@ -112,11 +149,11 @@ const AddUser = (props) => {
             fullWidth
             label="Repeat password"
             name="repeatPassword"
-            onChange={handleChange}
           />
 
           <p>Role:</p>
           <Select
+            name="roles"
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             value={role}
