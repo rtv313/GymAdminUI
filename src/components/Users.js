@@ -77,8 +77,8 @@ class Users extends React.Component {
             </Link>
           </Breadcrumbs>
           <h1>Users</h1>
-          <AddUser fetchExercises={this.fetchExercises} />
-          <div style={{ height: 400, width: "100%" }}>
+          <AddUser fetchUsers={this.fetchUsers} />
+          <div style={{ height: 1000, width: "100%" }}>
             <DataGrid
               rows={this.state.users}
               columns={this.columnsUsers}
