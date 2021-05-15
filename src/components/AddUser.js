@@ -21,9 +21,25 @@ const AddUser = (props) => {
   const [user, setUser] = useState({
     email: "",
     name: "",
+    lastname:"",
     password: "",
     roles: [],
   });
+
+  const [validEmail, setValidEmail] = useState(false);
+  const [errorEmailMessage,setErrorEmailMessage] = useState("");
+
+  const [validName, setValidName] = useState(false);
+  const [errorNameMessage, setErrorNameMessage] = useState("");
+
+  const [validLastname, setValidLastname] = useState(false);
+  const [errorLastnameMessage, setErrorLastnameMessage] = useState("");
+
+  const [validPassword, setValidPassword] = useState(false);
+  const [errorPasswordMessage, setErrorPasswordMessage] = useState("");
+
+  const [validRepeatPassword, setValidRepeatPassword] = useState(false);
+  const [errorRepeatPasswordMessage, setErrorRepeatPasswordMessage] = useState("");
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -54,6 +70,63 @@ const AddUser = (props) => {
         setRole(ROLE_USER);
     }
   };
+
+  function ValidateEmail(mail) 
+{
+  if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(mail))
+    {
+      return (true)
+    }
+      return (false)
+  }
+
+  const validateData = () => {
+
+    var valid = true;
+
+    if (user.email === "") {
+      setValidEmail(true);
+      setErrorEmailMessage("This field cannot be empty");
+      valid = false;
+    }else if(ValidateEmail(user.email)){
+      setValidEmail(true);
+      setErrorEmailMessage("This is not a valid email format");
+      valid = false;
+    }
+    else {
+      setValidName(false);
+      setErrorNameMessage("");
+    }
+
+    if (user.name === "") {
+      setValidName(true);
+      setErrorNameMessage("This field cannot be empty");
+      valid = false;
+    } else {
+      setValidName(false);
+      setErrorNameMessage("");
+    }
+
+    if (user.lastname === "") {
+      setValidLastname(true);
+      setErrorLastnameMessage("This field cannot be empty");
+      valid = false;
+    } else {
+      setValidLastname(false);
+      setErrorLastnameMessage("");
+    }
+
+    if(user.password === ""){
+      setValidPassword(true);
+      setErrorPasswordMessage("This field cannot be empty");
+    }else{ 
+      setValidPassword(false);
+      setErrorPasswordMessage("");
+    }
+
+
+    return valid;
+  }
 
   // Save user
   const handleSave = () => {
