@@ -21,13 +21,13 @@ const AddUser = (props) => {
   const [user, setUser] = useState({
     email: "",
     name: "",
-    lastname:"",
+    lastname: "",
     password: "",
     roles: [],
   });
 
   const [validEmail, setValidEmail] = useState(false);
-  const [errorEmailMessage,setErrorEmailMessage] = useState("");
+  const [errorEmailMessage, setErrorEmailMessage] = useState("");
 
   const [validName, setValidName] = useState(false);
   const [errorNameMessage, setErrorNameMessage] = useState("");
@@ -38,8 +38,10 @@ const AddUser = (props) => {
   const [validPassword, setValidPassword] = useState(false);
   const [errorPasswordMessage, setErrorPasswordMessage] = useState("");
 
+  const [repeatPassword, setRepeatPassword] = useState("");
   const [validRepeatPassword, setValidRepeatPassword] = useState(false);
-  const [errorRepeatPasswordMessage, setErrorRepeatPasswordMessage] = useState("");
+  const [errorRepeatPasswordMessage, setErrorRepeatPasswordMessage] =
+    useState("");
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -47,10 +49,16 @@ const AddUser = (props) => {
 
   const handleClose = () => {
     setOpen(false);
+    resetForm(false);
   };
 
   const handleChange = (event) => {
     setUser({ ...user, [event.target.name]: event.target.value });
+    resetForm(true);
+  };
+
+  const setRepeatPasswordOnChange = (event) => {
+    setRepeatPassword(event.target.value);
   };
 
   const handleRoleChange = (event) => {
@@ -71,29 +79,58 @@ const AddUser = (props) => {
     }
   };
 
-  function ValidateEmail(mail) 
-{
-  if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(mail))
-    {
-      return (true)
+  function ValidateEmail(mail) {
+    if (
+      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(
+        mail
+      )
+    ) {
+      return true;
     }
-      return (false)
+    return false;
   }
 
-  const validateData = () => {
+  const resetForm = (comeHandleChange) => {
+    setValidEmail(false);
+    setErrorEmailMessage("");
 
+    setValidName(false);
+    setErrorNameMessage("");
+
+    setValidLastname(false);
+    setErrorLastnameMessage("");
+
+    setValidPassword(false);
+    setErrorPasswordMessage("");
+
+    setValidRepeatPassword(false);
+    setErrorRepeatPasswordMessage("");
+
+    if (comeHandleChange !== true) {
+      setRoleId(1);
+      setRepeatPassword("");
+      setUser({
+        email: "",
+        name: "",
+        lastname: "",
+        password: "",
+        roles:[],
+      });
+    }
+  };
+
+  const validateData = () => {
     var valid = true;
 
     if (user.email === "") {
       setValidEmail(true);
       setErrorEmailMessage("This field cannot be empty");
       valid = false;
-    }else if(ValidateEmail(user.email)){
+    } else if (ValidateEmail(user.email)) {
       setValidEmail(true);
       setErrorEmailMessage("This is not a valid email format");
       valid = false;
-    }
-    else {
+    } else {
       setValidName(false);
       setErrorNameMessage("");
     }
@@ -116,64 +153,82 @@ const AddUser = (props) => {
       setErrorLastnameMessage("");
     }
 
-    if(user.password === ""){
+    if (user.password === "") {
       setValidPassword(true);
       setErrorPasswordMessage("This field cannot be empty");
-    }else{ 
+      valid = false;
+    } else {
       setValidPassword(false);
       setErrorPasswordMessage("");
     }
 
+    if (repeatPassword === "") {
+      setValidRepeatPassword(true);
+      setErrorRepeatPasswordMessage("This field cannot be empty");
+      valid = false;
+    } else {
+      setValidRepeatPassword(false);
+      setErrorRepeatPasswordMessage("");
+    }
+
+    if (user.password !== "" && repeatPassword !== "") {
+      if (user.password !== repeatPassword) {
+        setValidRepeatPassword(true);
+        setErrorRepeatPasswordMessage("The passwords are not equal");
+        valid = false;
+      }
+    }
 
     return valid;
-  }
+  };
 
   // Save user
   const handleSave = () => {
-    const token = "Bearer " + sessionStorage.getItem("accessToken");
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", token);
-    myHeaders.append("Content-Type", "application/json");
+    if (validateData()) {
+      const token = "Bearer " + sessionStorage.getItem("accessToken");
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", token);
+      myHeaders.append("Content-Type", "application/json");
 
-    var nestedRole = new Object();
-    nestedRole.id = roleId;
-    nestedRole.name = role;
-    user.roles = [nestedRole];
-    var raw = JSON.stringify(user);
+      var nestedRole = new Object();
+      nestedRole.id = roleId;
+      nestedRole.name = role;
+      user.roles = [nestedRole];
+      var raw = JSON.stringify(user);
 
-    var requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
+      var requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
 
-
-    var errorFlag = false;
-    fetch(SERVER_URL + "api/users/", requestOptions)
-      .then((response) => {
-        if(response.status !== 201){
-          errorFlag = true;
-        }
-        return response;
-      })
-      .then((response) => response.json())
-      .then((responseData) => {
-        if (errorFlag === true) {
-          toast.warn(responseData.message, {
-            position: toast.POSITION.BOTTOM_LEFT,
-          });
-        } else {
-          toast.success("User Created", {
-            position: toast.POSITION.BOTTOM_LEFT,
-          });
-        }
-      })
-      .then(props.fetchUsers())
-      .catch((error) => {
-        console.log("error", error);
-      });
-    handleClose();
+      var errorFlag = false;
+      fetch(SERVER_URL + "api/users/", requestOptions)
+        .then((response) => {
+          if (response.status !== 201) {
+            errorFlag = true;
+          }
+          return response;
+        })
+        .then((response) => response.json())
+        .then((responseData) => {
+          if (errorFlag === true) {
+            toast.warn(responseData.message, {
+              position: toast.POSITION.BOTTOM_LEFT,
+            });
+          } else {
+            toast.success("User Created", {
+              position: toast.POSITION.BOTTOM_LEFT,
+            });
+          }
+        })
+        .then(props.fetchUsers())
+        .catch((error) => {
+          console.log("error", error);
+        });
+      handleClose();
+    }
   };
 
   return (
@@ -196,6 +251,8 @@ const AddUser = (props) => {
             label="Email"
             name="email"
             onChange={handleChange}
+            error={validEmail}
+            helperText={errorEmailMessage}
           />
 
           <TextField
@@ -204,6 +261,8 @@ const AddUser = (props) => {
             label="Name"
             name="name"
             onChange={handleChange}
+            error={validName}
+            helperText={errorNameMessage}
           />
 
           <TextField
@@ -212,6 +271,8 @@ const AddUser = (props) => {
             label="Lastname"
             name="lastname"
             onChange={handleChange}
+            error={validLastname}
+            helperText={errorLastnameMessage}
           />
 
           <TextField
@@ -221,14 +282,20 @@ const AddUser = (props) => {
             label="Password"
             name="password"
             onChange={handleChange}
+            error={validPassword}
+            helperText={errorPasswordMessage}
           />
 
           <TextField
             type="password"
             autoFocus
             fullWidth
+            value={repeatPassword}
             label="Repeat password"
             name="repeatPassword"
+            onChange={setRepeatPasswordOnChange}
+            error={validRepeatPassword}
+            helperText={errorRepeatPasswordMessage}
           />
 
           <p>Role:</p>
