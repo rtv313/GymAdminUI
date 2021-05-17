@@ -59,6 +59,7 @@ const AddUser = (props) => {
 
   const setRepeatPasswordOnChange = (event) => {
     setRepeatPassword(event.target.value);
+    resetForm(true);
   };
 
   const handleRoleChange = (event) => {
