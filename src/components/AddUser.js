@@ -80,14 +80,8 @@ const AddUser = (props) => {
   };
 
   function ValidateEmail(mail) {
-    if (
-      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(
-        mail
-      )
-    ) {
-      return true;
-    }
-    return false;
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(mail).toLowerCase());
   }
 
   const resetForm = (comeHandleChange) => {
@@ -126,7 +120,7 @@ const AddUser = (props) => {
       setValidEmail(true);
       setErrorEmailMessage("This field cannot be empty");
       valid = false;
-    } else if (ValidateEmail(user.email)) {
+    } else if (ValidateEmail(user.email) === false) {
       setValidEmail(true);
       setErrorEmailMessage("This is not a valid email format");
       valid = false;
