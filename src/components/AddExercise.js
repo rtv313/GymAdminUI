@@ -45,7 +45,7 @@ const AddExercise = (props) => {
     resetForm(true);
   };
 
-  const resetForm = (comeHandleChange) =>{
+  const resetForm = (comeHandleChange) => {
     setValidName(false);
     setErrorNameMessage("");
 
@@ -61,10 +61,16 @@ const AddExercise = (props) => {
     setValidBodyPart(false);
     setErrorBodyPartMessage("");
 
-    if(comeHandleChange !== true){
-      setExercise({"name":"","imageUrl":"","description":"","videoUrl":"","bodyPart":""});
+    if (comeHandleChange !== true) {
+      setExercise({
+        name: "",
+        imageUrl: "",
+        description: "",
+        videoUrl: "",
+        bodyPart: "",
+      });
     }
-  }
+  };
 
   const validateData = () => {
     var valid = true;
@@ -118,7 +124,7 @@ const AddExercise = (props) => {
 
   // Save exercise
   const handleSave = () => {
-    if(validateData()){
+    if (validateData()) {
       props.addExercise(exercise);
       handleClose();
     }
