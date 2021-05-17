@@ -216,9 +216,9 @@ const AddUser = (props) => {
             toast.success("User Created", {
               position: toast.POSITION.BOTTOM_LEFT,
             });
+            props.fetchUsers();
           }
         })
-        .then(props.fetchUsers())
         .catch((error) => {
           console.log("error", error);
         });
