@@ -7,6 +7,7 @@ import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { ToastContainer, toast } from "react-toastify";
 import { DataGrid } from "@material-ui/data-grid";
+import Button from "@material-ui/core/Button";
 import AddUser from "./AddUser";
 
 class Users extends React.Component {
@@ -15,6 +16,26 @@ class Users extends React.Component {
     { field: "name", headerName: "Name", width: 180 },
     { field: "lastname", headerName: "Lastname", width: 180 },
     { field: "roles", headerName: "Role", width: 180 },
+    {
+      field: "delete",
+      disableClickEventBubbling: true,
+      headerName: "Delete",
+      description: "This column has a value getter and is not sortable.",
+      sortable: false,
+      width: 160,
+      renderCell: (params) => {
+
+        const onClick = () => {
+          this.deleteUser(params.getValue("id"));
+         };
+   
+        return (
+          <Button variant="contained" color="secondary" onClick={onClick}>
+            Delete
+          </Button>
+        );
+      },
+    },
   ];
 
   constructor(props) {
@@ -54,6 +75,33 @@ class Users extends React.Component {
       })
       .catch((err) => console.error(err));
   };
+
+  deleteUser(userId){
+
+    const token = "Bearer " + sessionStorage.getItem("accessToken");
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", token);
+    myHeaders.append("Content-Type", "application/json");
+
+    var requestOptions = {
+      method: 'DELETE',
+      headers: myHeaders,
+      redirect: 'follow'
+    };
+    
+    fetch(SERVER_URL + "api/users/" + userId, requestOptions)
+      .then((response) => {
+        if(response.status !== 200){
+          toast.warn("Cannot delete user", {position: toast.POSITION.BOTTOM_LEFT}); 
+        }else{
+          toast.success("User deleted", {position: toast.POSITION.BOTTOM_LEFT}); 
+        }
+        return response.text();
+      })
+      .then(result => console.log(result))
+      .then(res => this.fetchUsers())
+      .catch(error => console.log('error', error));
+  }
 
   render() {
     return (
