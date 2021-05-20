@@ -9,6 +9,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { DataGrid } from "@material-ui/data-grid";
 import Button from "@material-ui/core/Button";
 import AddUser from "./AddUser";
+import EditUser from "./EditUser";
 
 class Users extends React.Component {
   columnsUsers = [
@@ -16,6 +17,18 @@ class Users extends React.Component {
     { field: "name", headerName: "Name", width: 180 },
     { field: "lastname", headerName: "Lastname", width: 180 },
     { field: "roles", headerName: "Role", width: 180 },
+    {
+      field: "edit",
+      headerName: "Edit",
+      description: "This column has a value getter and is not sortable.",
+      sortable: false,
+      width: 160,
+      renderCell: (params) => {
+        return (
+          <EditUser id={params.getValue("id")} fetchUsers={this.fetchUsers}/>
+        );
+      },
+    },
     {
       field: "delete",
       disableClickEventBubbling: true,
