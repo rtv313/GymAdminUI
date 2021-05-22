@@ -14,6 +14,7 @@ const RoutineByMonth = (props) => {
       <Container>
         <CssBaseline />
         <Logout />
+
         <Breadcrumbs>
           <Link to="">
             <h1>Home</h1>
@@ -26,7 +27,7 @@ const RoutineByMonth = (props) => {
           </Link>
         </Breadcrumbs>
 
-        <h1>Routine by Month</h1>
+        <h1>Routines by Month</h1>
         <h2>User id is {userId}</h2>
         <Link to="/routineByDay">
           <h1>Routine By Day</h1>

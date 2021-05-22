@@ -3,7 +3,6 @@ import '../App.css';
 import { BrowserRouter, Switch, Route, Link } from 'react-router-dom'
 import Exercises from './Exercises';
 import Users from './Users';
-import User from './User';
 import RoutineByMonth from './RoutineByMonth'
 import RoutineByDay from './RoutineByDay'
 import Home from './Home';
@@ -24,7 +23,6 @@ class Menu extends React.Component {
             <Switch>
               <Route path="/exercises" component={() => <Exercises/>} />
               <Route path="/users" component={() => <Users/>} />
-              <Route path="/user/:p1" component={User} />
               <Route path="/routineByMonth/:userId" component={RoutineByMonth} />
               <Route path="/routineByDay" component={RoutineByDay} />
               <Route path="" component={Home} />
