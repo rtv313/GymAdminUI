@@ -25,7 +25,24 @@ class Users extends React.Component {
       width: 160,
       renderCell: (params) => {
         return (
-          <EditUser id={params.getValue("id")} fetchUsers={this.fetchUsers}/>
+          <EditUser id={params.getValue("id")} fetchUsers={this.fetchUsers} />
+        );
+      },
+    },
+    {
+      field: "routineByMonth",
+      headerName: "Routines by month",
+      description: "This column has a value getter and is not sortable.",
+      sortable: false,
+      width: 210,
+      renderCell: (params) => {
+        var link = "/routineByMonth/" + params.getValue("id");
+        return (
+          <Link to={link}>
+            <Button variant="outlined" color="primary">
+              Routines by month
+            </Button>
+          </Link>
         );
       },
     },
@@ -37,11 +54,10 @@ class Users extends React.Component {
       sortable: false,
       width: 160,
       renderCell: (params) => {
-
         const onClick = () => {
           this.deleteUser(params.getValue("id"));
-         };
-   
+        };
+
         return (
           <Button variant="contained" color="secondary" onClick={onClick}>
             Delete
@@ -89,31 +105,34 @@ class Users extends React.Component {
       .catch((err) => console.error(err));
   };
 
-  deleteUser(userId){
-
+  deleteUser(userId) {
     const token = "Bearer " + sessionStorage.getItem("accessToken");
     var myHeaders = new Headers();
     myHeaders.append("Authorization", token);
     myHeaders.append("Content-Type", "application/json");
 
     var requestOptions = {
-      method: 'DELETE',
+      method: "DELETE",
       headers: myHeaders,
-      redirect: 'follow'
+      redirect: "follow",
     };
-    
+
     fetch(SERVER_URL + "api/users/" + userId, requestOptions)
       .then((response) => {
-        if(response.status !== 200){
-          toast.warn("Cannot delete user", {position: toast.POSITION.BOTTOM_LEFT}); 
-        }else{
-          toast.success("User deleted", {position: toast.POSITION.BOTTOM_LEFT}); 
+        if (response.status !== 200) {
+          toast.warn("Cannot delete user", {
+            position: toast.POSITION.BOTTOM_LEFT,
+          });
+        } else {
+          toast.success("User deleted", {
+            position: toast.POSITION.BOTTOM_LEFT,
+          });
         }
         return response.text();
       })
-      .then(result => console.log(result))
-      .then(res => this.fetchUsers())
-      .catch(error => console.log('error', error));
+      .then((result) => console.log(result))
+      .then((res) => this.fetchUsers())
+      .catch((error) => console.log("error", error));
   }
 
   render() {

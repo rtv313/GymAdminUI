@@ -12,6 +12,7 @@ class Menu extends React.Component {
 
   constructor(props) {
     super(props);
+  
   }
 
 
@@ -24,7 +25,7 @@ class Menu extends React.Component {
               <Route path="/exercises" component={() => <Exercises/>} />
               <Route path="/users" component={() => <Users/>} />
               <Route path="/user/:p1" component={User} />
-              <Route path="/routineByMonth" component={RoutineByMonth} />
+              <Route path="/routineByMonth/:userId" component={RoutineByMonth} />
               <Route path="/routineByDay" component={RoutineByDay} />
               <Route path="" component={Home} />
             </Switch>
