@@ -1,13 +1,123 @@
-import React from "react";
+import React, { useState } from "react";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import Container from "@material-ui/core/Container";
 import Logout from "./Logout";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import { useRef, useEffect } from "react";
+import Button from "@material-ui/core/Button";
+import { SERVER_URL } from "./Constants.js";
+import { toast } from "react-toastify";
+import { DataGrid } from "@material-ui/data-grid";
 
 const RoutineByMonth = (props) => {
   const { userId } = useParams();
+  const [columnsUsers, setColumnsUser] = useState([
+    { field: "name", headerName: "Name", width: 180 },
+    { field: "createAt", headerName: "Creation date", width: 180 },
+    { field: "coachUser", headerName: "Coach", width: 180 },
+    {
+      field: "edit",
+      headerName: "Edit",
+      description: "This column has a value getter and is not sortable.",
+      sortable: false,
+      width: 160,
+      renderCell: (params) => {
+        return <Button id={params.getValue("id")}>Edit</Button>;
+      },
+    },
+    {
+      field: "routinesByDay",
+      headerName: "Routines by day",
+      description: "This column has a value getter and is not sortable.",
+      sortable: false,
+      width: 210,
+      renderCell: (params) => {
+        var link = "/routineByDay/";
+        return (
+          <Link to={link}>
+            <Button variant="outlined" color="primary">
+              Routines by day
+            </Button>
+          </Link>
+        );
+      },
+    },
+    {
+      field: "delete",
+      disableClickEventBubbling: true,
+      headerName: "Delete",
+      description: "This column has a value getter and is not sortable.",
+      sortable: false,
+      width: 160,
+      renderCell: (params) => {
+        const onClick = () => {
+          //this.deleteUser(params.getValue("id"));
+        };
+
+        return (
+          <Button variant="contained" color="secondary" onClick={onClick}>
+            Delete
+          </Button>
+        );
+      },
+    },
+  ]);
+  const [user, setUser] = useState({
+    email: "",
+    name: "",
+    lastname: "",
+    password: "",
+    roles: [],
+  });
+  const [routinesByMonth, setRoutinesByMonth] = useState([]);
+
+  const getUserData = (id) => {
+    const token = "Bearer " + sessionStorage.getItem("accessToken");
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", token);
+    myHeaders.append("Content-Type", "application/json");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(SERVER_URL + "api/users/" + id, requestOptions)
+      .then((response) => {
+        if (response.status !== 200) {
+          toast.warn("Cannot get User", {
+            position: toast.POSITION.BOTTOM_LEFT,
+          });
+          return false;
+        } else {
+          toast.success("Get User data succesfully", {
+            position: toast.POSITION.BOTTOM_LEFT,
+          });
+        }
+        return response;
+      })
+      .then((response) => response.json())
+      .then((responseData) => {
+        setUser({
+          email: responseData.email,
+          name: responseData.name,
+          lastname: responseData.lastname,
+          password: responseData.password,
+          roles: responseData.roles,
+        });
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
+  };
+
+  useEffect(() => {
+    // Runs after the first render() lifecycle
+    getUserData(userId); 
+  }, []);
 
   return (
     <div>
@@ -32,6 +142,14 @@ const RoutineByMonth = (props) => {
         <Link to="/routineByDay">
           <h1>Routine By Day</h1>
         </Link>
+
+        <div style={{ height: 1000, width: "100%" }}>
+          <DataGrid
+            rows={routinesByMonth}
+            columns={columnsUsers}
+            pageSize={50}
+          />
+        </div>
       </Container>
     </div>
   );
