@@ -10,6 +10,7 @@ import Button from "@material-ui/core/Button";
 import { SERVER_URL } from "./Constants.js";
 import { toast } from "react-toastify";
 import { DataGrid } from "@material-ui/data-grid";
+import  { useCallback } from 'react';
 
 const RoutineByMonth = (props) => {
   const { userId } = useParams();
@@ -64,6 +65,7 @@ const RoutineByMonth = (props) => {
       },
     },
   ]);
+
   const [user, setUser] = useState({
     email: "",
     name: "",
@@ -71,6 +73,7 @@ const RoutineByMonth = (props) => {
     password: "",
     roles: [],
   });
+
   const [routinesByMonth, setRoutinesByMonth] = useState([]);
 
   const getUserData = (id) => {
@@ -107,17 +110,67 @@ const RoutineByMonth = (props) => {
           lastname: responseData.lastname,
           password: responseData.password,
           roles: responseData.roles,
-        });
+        },fetchRoutinesByMonth(responseData));
       })
       .catch((error) => {
         console.log("error", error);
       });
   };
 
+  // Fetch all RoutinesByMonth
+  const fetchRoutinesByMonth = (responseData) => {
+    // Read the token from the session storage
+    // and include it to Authorization header
+    const token = "Bearer " + sessionStorage.getItem("accessToken");
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", token);
+    myHeaders.append("Content-Type", "application/json");
+
+    var userJson = JSON.stringify({
+      "id": responseData.id,
+      "email": responseData.email,
+      "name": responseData.name,
+      "lastname": responseData.lastname,
+      "password": responseData.password,
+      "roles": responseData.roles
+    });
+
+    var raw = JSON.stringify({
+      "id": 1,
+      "email": "normal@gmail.com",
+      "name": "r",
+      "lastname": "rt",
+      "password": "$2a$04$1.YhMIgNX/8TkCKGFUONWO1waedKhQ5KrnB30fl0Q01QKqmzLf.Zi",
+      "roles": [
+        {
+          "id": 1,
+          "name": "ROLE_USER"
+        }
+      ]
+    });
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body:raw,
+      redirect: "follow",
+    };
+
+    fetch(SERVER_URL + "api/routinesByMonthByNormalUser/", requestOptions)
+      .then((response) => response.json())
+      .then((responseData) => {
+        setRoutinesByMonth(responseData);
+      })
+      .catch((err) =>{ 
+        console.error(err)});
+  };
+
   useEffect(() => {
     // Runs after the first render() lifecycle
     getUserData(userId); 
   }, []);
+
+
 
   return (
     <div>
@@ -138,20 +191,21 @@ const RoutineByMonth = (props) => {
         </Breadcrumbs>
 
         <h1>Routines by Month</h1>
-        <h2>User id is {userId}</h2>
+        <h2>User id is {userId} {user.name}</h2>
         <Link to="/routineByDay">
           <h1>Routine By Day</h1>
         </Link>
 
         <div style={{ height: 1000, width: "100%" }}>
-          <DataGrid
-            rows={routinesByMonth}
-            columns={columnsUsers}
-            pageSize={50}
-          />
+        <DataGrid
+              rows={routinesByMonth}
+              columns={columnsUsers}
+              pageSize={50}
+            />
         </div>
       </Container>
     </div>
+   
   );
 };
 
