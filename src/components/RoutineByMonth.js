@@ -5,12 +5,13 @@ import { useParams } from "react-router-dom";
 import Container from "@material-ui/core/Container";
 import Logout from "./Logout";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import { useRef, useEffect } from "react";
+import { useEffect } from "react";
 import Button from "@material-ui/core/Button";
 import { SERVER_URL } from "./Constants.js";
 import { toast } from "react-toastify";
 import { DataGrid } from "@material-ui/data-grid";
-import { useCallback } from "react";
+import AddRoutineByMonth from "./AddRoutineByMonth"
+
 
 const RoutineByMonth = (props) => {
   const { userId } = useParams();
@@ -207,6 +208,9 @@ const RoutineByMonth = (props) => {
         <h2>
           User id is {userId} {user.name}
         </h2>
+
+        <AddRoutineByMonth />
+
         <Link to="/routineByDay">
           <h1>Routine By Day</h1>
         </Link>
