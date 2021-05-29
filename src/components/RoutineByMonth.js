@@ -8,9 +8,9 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { useEffect } from "react";
 import Button from "@material-ui/core/Button";
 import { SERVER_URL } from "./Constants.js";
-import { toast } from "react-toastify";
 import { DataGrid } from "@material-ui/data-grid";
 import AddRoutineByMonth from "./AddRoutineByMonth"
+import { ToastContainer, toast } from 'react-toastify';
 
 
 const RoutineByMonth = (props) => {
@@ -238,6 +238,8 @@ const RoutineByMonth = (props) => {
           />
         </div>
       </Container>
+      <br />
+      <ToastContainer autoClose={1500} /> 
     </div>
   );
 };
