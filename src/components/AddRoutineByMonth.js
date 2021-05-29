@@ -141,7 +141,7 @@ const AddRoutineByMonth = (props) => {
             toast.success("Routine by month Created", {
               position: toast.POSITION.BOTTOM_LEFT,
             });
-            props.fetchRoutinesByMonth();
+            props.fetchRoutinesByMonth(props.responseData);
           }
         })
         .catch((error) => {

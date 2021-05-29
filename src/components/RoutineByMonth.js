@@ -84,6 +84,8 @@ const RoutineByMonth = (props) => {
     roles: [],
   });
 
+  const [responseDataPass, setResponseDataPass] = useState({});
+
   const [routinesByMonth, setRoutinesByMonth] = useState([]);
 
   const getUserData = (id) => {
@@ -134,6 +136,7 @@ const RoutineByMonth = (props) => {
   const fetchRoutinesByMonth = (responseData) => {
     // Read the token from the session storage
     // and include it to Authorization header
+    setResponseDataPass(responseData);
     const token = "Bearer " + sessionStorage.getItem("accessToken");
     var myHeaders = new Headers();
     myHeaders.append("Authorization", token);
@@ -209,7 +212,7 @@ const RoutineByMonth = (props) => {
           User id is {userId} {user.name}
         </h2>
 
-        <AddRoutineByMonth  userId = {userId}/>
+        <AddRoutineByMonth  userId = {userId} responseData={responseDataPass} fetchRoutinesByMonth={fetchRoutinesByMonth}/>
 
         <Link to="/routineByDay">
           <h1>Routine By Day</h1>
