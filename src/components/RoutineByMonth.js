@@ -9,20 +9,15 @@ import { useEffect } from "react";
 import Button from "@material-ui/core/Button";
 import { SERVER_URL } from "./Constants.js";
 import { DataGrid } from "@material-ui/data-grid";
-import AddRoutineByMonth from "./AddRoutineByMonth"
-import { ToastContainer, toast } from 'react-toastify';
-
+import AddRoutineByMonth from "./AddRoutineByMonth";
+import { ToastContainer, toast } from "react-toastify";
 
 const RoutineByMonth = (props) => {
   const { userId } = useParams();
   const [columnsUsers, setColumnsUser] = useState([
     { field: "name", headerName: "Name", width: 180 },
     { field: "createAt", headerName: "Creation date", width: 180 },
-    { field: "coachUser", 
-    headerName: "Coach",
-     width: 180,
-    
-    },
+    { field: "coachUser", headerName: "Coach", width: 180 },
     {
       field: "edit",
       headerName: "Edit",
@@ -30,7 +25,15 @@ const RoutineByMonth = (props) => {
       sortable: false,
       width: 160,
       renderCell: (params) => {
-        return <Button variant="contained" color="primary" id={params.getValue("id")}>Edit</Button>;
+        return (
+          <Button
+            variant="contained"
+            color="primary"
+            id={params.getValue("id")}
+          >
+            Edit
+          </Button>
+        );
       },
     },
     {
@@ -95,26 +98,33 @@ const RoutineByMonth = (props) => {
     myHeaders.append("Content-Type", "application/json");
 
     var requestOptions = {
-      method: 'DELETE',
+      method: "DELETE",
       headers: myHeaders,
-      redirect: 'follow'
+      redirect: "follow",
     };
-    
-    fetch(SERVER_URL + "api/routinesByMonth/" + routineByMonthId, requestOptions)
+
+    fetch(
+      SERVER_URL + "api/routinesByMonth/" + routineByMonthId,
+      requestOptions
+    )
       .then((response) => {
-        if(response.status !== 200){
-          toast.warn("Cannot delete Routine by Month", {position: toast.POSITION.BOTTOM_LEFT}); 
-        }else{
-          toast.success("Routine by Month deleted", {position: toast.POSITION.BOTTOM_LEFT}); 
+        if (response.status !== 200) {
+          toast.warn("Cannot delete Routine by Month", {
+            position: toast.POSITION.BOTTOM_LEFT,
+          });
+        } else {
+          toast.success("Routine by Month deleted", {
+            position: toast.POSITION.BOTTOM_LEFT,
+          });
         }
         return response.text();
       })
-      .then(result => console.log(result))
-      .then(res => getUserData(userId))
-      .catch(error => console.log('error', error));
-  }
+      .then((result) => console.log(result))
+      .then((res) => getUserData(userId, true))
+      .catch((error) => console.log("error", error));
+  };
 
-  const getUserData = (id) => {
+  const getUserData = (id, comeFromDelete) => {
     const token = "Bearer " + sessionStorage.getItem("accessToken");
     var myHeaders = new Headers();
     myHeaders.append("Authorization", token);
@@ -134,9 +144,11 @@ const RoutineByMonth = (props) => {
           });
           return false;
         } else {
-          toast.success("Get User data succesfully", {
-            position: toast.POSITION.BOTTOM_LEFT,
-          });
+          if (comeFromDelete === false) {
+            toast.success("Get User data succesfully", {
+              position: toast.POSITION.BOTTOM_LEFT,
+            });
+          }
         }
         return response;
       })
@@ -189,7 +201,6 @@ const RoutineByMonth = (props) => {
       .then((responseData) => {
         responseData.map(setCoachUser);
         setRoutinesByMonth(responseData);
-        
       })
       .catch((err) => {
         console.error(err);
@@ -198,7 +209,7 @@ const RoutineByMonth = (props) => {
 
   useEffect(() => {
     // Runs after the first render() lifecycle
-    getUserData(userId);
+    getUserData(userId, false);
   }, []);
 
   return (
@@ -224,7 +235,11 @@ const RoutineByMonth = (props) => {
           User id is {userId} {user.name}
         </h2>
 
-        <AddRoutineByMonth  userId = {userId} responseData={responseDataPass} fetchRoutinesByMonth={fetchRoutinesByMonth}/>
+        <AddRoutineByMonth
+          userId={userId}
+          responseData={responseDataPass}
+          fetchRoutinesByMonth={fetchRoutinesByMonth}
+        />
 
         <Link to="/routineByDay">
           <h1>Routine By Day</h1>
@@ -239,7 +254,7 @@ const RoutineByMonth = (props) => {
         </div>
       </Container>
       <br />
-      <ToastContainer autoClose={1500} /> 
+      <ToastContainer autoClose={1500} />
     </div>
   );
 };
