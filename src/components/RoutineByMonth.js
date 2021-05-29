@@ -151,24 +151,10 @@ const RoutineByMonth = (props) => {
       roles: responseData.roles,
     });
 
-    var raw = JSON.stringify({
-      id: 1,
-      email: "normal@gmail.com",
-      name: "r",
-      lastname: "rt",
-      password: "$2a$04$1.YhMIgNX/8TkCKGFUONWO1waedKhQ5KrnB30fl0Q01QKqmzLf.Zi",
-      roles: [
-        {
-          id: 1,
-          name: "ROLE_USER",
-        },
-      ],
-    });
-
     var requestOptions = {
       method: "POST",
       headers: myHeaders,
-      body: raw,
+      body: userJson,
       redirect: "follow",
     };
 
