@@ -7,6 +7,9 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import { DataGrid } from "@material-ui/data-grid";
 import { SERVER_URL } from "./Constants.js";
+import { toast } from "react-toastify";
+
+const dateformat = require("dateformat");
 
 const AddRoutineByMonth = (props) => {
   const [open, setOpen] = useState(false);
@@ -17,7 +20,9 @@ const AddRoutineByMonth = (props) => {
   });
 
   const [coaches, setCoaches] = useState([]);
-  const [selectedCoach, setSeletectCoach] = useState();
+  const [selectedCoach, setSeletectCoach] = useState({});
+  const [validName, setValidName] = useState(false);
+  const [errorNameMessage, setErrorNameMessage] = useState("");
 
   const setCoach = (coach) => {
     setSeletectCoach(coach);
@@ -41,14 +46,24 @@ const AddRoutineByMonth = (props) => {
 
         return (
           <Button variant="contained" color="primary" onClick={onClick}>
-             Set coach
+            Set coach
           </Button>
         );
       },
     },
   ]);
 
-  
+  const resetForm =(comeHandleChange) =>{
+    setValidName(false);
+    setErrorNameMessage("");
+    if (comeHandleChange !== true) {
+      setRoutineByMonth({
+        name: "",
+        createAt: "",
+        coachUser: {},
+      });
+    }
+  }
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -57,23 +72,90 @@ const AddRoutineByMonth = (props) => {
 
   const handleClose = () => {
     setOpen(false);
+    resetForm(false);
   };
 
-  const handleChange = (event) => {};
+  const handleChange = (event) => {
+    var today = new Date();
+    var todayFormat = dateformat(today, "yyyy-mm-dd");
+
+    setRoutineByMonth({
+      name: event.target.value,
+      createAt: todayFormat,
+      coachUser: {},
+    });
+    resetForm(true);
+  };
+
+  const validateData = () => {
+    var valid = true;
+    if (routineByMonth.name === "") {
+      setValidName(true);
+      setErrorNameMessage("This field cannot be empty");
+      valid = false;
+    } else {
+      setValidName(false);
+      setErrorNameMessage("");
+    }
+    return valid;
+  };
 
   // Save RoutineByMonth
   const handleSave = () => {
-    handleClose();
+    if (validateData() === true) {
+      const token = "Bearer " + sessionStorage.getItem("accessToken");
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", token);
+      myHeaders.append("Content-Type", "application/json");
+      var raw = JSON.stringify(routineByMonth);
+
+      var requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+
+      var errorFlag = false;
+      fetch(
+        SERVER_URL +
+          "api/routinesByMonth/" +
+          props.userId +
+          "/" +
+          selectedCoach.id,
+        requestOptions
+      )
+        .then((response) => {
+          if (response.status !== 201) {
+            errorFlag = true;
+          }
+          return response;
+        })
+        .then((response) => response.json())
+        .then((responseData) => {
+          if (errorFlag === true) {
+            toast.warn(responseData.message, {
+              position: toast.POSITION.BOTTOM_LEFT,
+            });
+          } else {
+            toast.success("Routine by month Created", {
+              position: toast.POSITION.BOTTOM_LEFT,
+            });
+            props.fetchRoutinesByMonth();
+          }
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
+      handleClose();
+    }
   };
 
   const filterCoachUsers = (value) => {
     return value.roles[0].name === "ROLE_COACH";
   };
 
-  const filterCoachById = (value, id) => {
-    return value.roles[0].id === id;
-  };
-  // Fetch all users
+  // Fetch all users and filter by coach users
   const fetchCoaches = () => {
     // Read the token from the session storage
     // and include it to Authorization header
@@ -108,16 +190,24 @@ const AddRoutineByMonth = (props) => {
         New Routine by Month
       </Button>
 
-      <Dialog open={open} onClose={handleClose} fullScreen disableEnforceFocus >
+      <Dialog open={open} onClose={handleClose} fullScreen disableEnforceFocus>
         <DialogTitle> New Routine by Month</DialogTitle>
         <DialogContent>
-          <TextField autoFocus fullWidth label="Name" />
+          <TextField
+            autoFocus
+            fullWidth
+            label="Name"
+            onChange={handleChange}
+            value={routineByMonth.name}
+            error={validName}
+            helperText={errorNameMessage}
+          />
           <br /> <br />
-
-          <h4>Selected Coach:{selectedCoach.email},{selectedCoach.name} {selectedCoach.lastname}</h4>
-
+          <h4>
+            Selected Coach:{selectedCoach.email},{selectedCoach.name}{" "}
+            {selectedCoach.lastname}
+          </h4>
           <DataGrid rows={coaches} columns={columnsCoaches} pageSize={15} />
-
         </DialogContent>
 
         <DialogActions>

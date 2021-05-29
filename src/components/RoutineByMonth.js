@@ -209,7 +209,7 @@ const RoutineByMonth = (props) => {
           User id is {userId} {user.name}
         </h2>
 
-        <AddRoutineByMonth />
+        <AddRoutineByMonth  userId = {userId}/>
 
         <Link to="/routineByDay">
           <h1>Routine By Day</h1>
