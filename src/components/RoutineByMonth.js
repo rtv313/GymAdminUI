@@ -59,7 +59,7 @@ const RoutineByMonth = (props) => {
       width: 160,
       renderCell: (params) => {
         const onClick = () => {
-          //this.deleteUser(params.getValue("id"));
+          deleteRoutineByMonth(params.getValue("id"));
         };
 
         return (
@@ -84,9 +84,35 @@ const RoutineByMonth = (props) => {
     roles: [],
   });
 
-  const [responseDataPass, setResponseDataPass] = useState({});
+  const [responseDataPass, setResponseDataPass] = useState();
 
   const [routinesByMonth, setRoutinesByMonth] = useState([]);
+
+  const deleteRoutineByMonth = (routineByMonthId) => {
+    const token = "Bearer " + sessionStorage.getItem("accessToken");
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", token);
+    myHeaders.append("Content-Type", "application/json");
+
+    var requestOptions = {
+      method: 'DELETE',
+      headers: myHeaders,
+      redirect: 'follow'
+    };
+    
+    fetch(SERVER_URL + "api/routinesByMonth/" + routineByMonthId, requestOptions)
+      .then((response) => {
+        if(response.status !== 200){
+          toast.warn("Cannot delete Routine by Month", {position: toast.POSITION.BOTTOM_LEFT}); 
+        }else{
+          toast.success("Routine by Month deleted", {position: toast.POSITION.BOTTOM_LEFT}); 
+        }
+        return response.text();
+      })
+      .then(result => console.log(result))
+      .then(res => getUserData(userId))
+      .catch(error => console.log('error', error));
+  }
 
   const getUserData = (id) => {
     const token = "Bearer " + sessionStorage.getItem("accessToken");
@@ -116,6 +142,7 @@ const RoutineByMonth = (props) => {
       })
       .then((response) => response.json())
       .then((responseData) => {
+        setResponseDataPass(responseData);
         setUser(
           {
             email: responseData.email,
@@ -136,7 +163,6 @@ const RoutineByMonth = (props) => {
   const fetchRoutinesByMonth = (responseData) => {
     // Read the token from the session storage
     // and include it to Authorization header
-    setResponseDataPass(responseData);
     const token = "Bearer " + sessionStorage.getItem("accessToken");
     var myHeaders = new Headers();
     myHeaders.append("Authorization", token);
