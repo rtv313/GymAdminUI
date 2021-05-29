@@ -53,7 +53,7 @@ const AddRoutineByMonth = (props) => {
     },
   ]);
 
-  const resetForm =(comeHandleChange) =>{
+  const resetForm = (comeHandleChange) => {
     setValidName(false);
     setErrorNameMessage("");
     if (comeHandleChange !== true) {
@@ -63,7 +63,7 @@ const AddRoutineByMonth = (props) => {
         coachUser: {},
       });
     }
-  }
+  };
 
   const handleClickOpen = () => {
     setOpen(true);
