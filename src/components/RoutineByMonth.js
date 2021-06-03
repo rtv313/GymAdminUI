@@ -77,9 +77,7 @@ const RoutineByMonth = (props) => {
     },
   ]);
 
-  const wrapperFetchRoutines = () =>{
-    fetchRoutinesByMonth(responseDataPass);
-  }
+  
 
   const setCoachUser = (value) => {
     value.coachUser = value.coachUser.email;
@@ -97,6 +95,10 @@ const RoutineByMonth = (props) => {
   const [responseDataPass, setResponseDataPass] = useState();
 
   const [routinesByMonth, setRoutinesByMonth] = useState([]);
+
+  const wrapperFetchRoutines = () =>{
+    getUserData(userId,false);
+  }
 
   const deleteRoutineByMonth = (routineByMonthId) => {
     const token = "Bearer " + sessionStorage.getItem("accessToken");
