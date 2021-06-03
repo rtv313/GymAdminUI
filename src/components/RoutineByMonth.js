@@ -97,7 +97,7 @@ const RoutineByMonth = (props) => {
   const [routinesByMonth, setRoutinesByMonth] = useState([]);
 
   const wrapperFetchRoutines = () =>{
-    getUserData(userId,false);
+    getUserData(userId,true);
   }
 
   const deleteRoutineByMonth = (routineByMonthId) => {
