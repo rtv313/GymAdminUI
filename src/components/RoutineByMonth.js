@@ -218,7 +218,7 @@ const RoutineByMonth = (props) => {
 
   useEffect(() => {
     // Runs after the first render() lifecycle
-    getUserData(userId, false);
+    getUserData(userId, true);
   }, []);
 
   return (
