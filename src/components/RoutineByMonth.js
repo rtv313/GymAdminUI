@@ -239,9 +239,12 @@ const RoutineByMonth = (props) => {
           </Link>
         </Breadcrumbs>
 
-        <h1>Routines by Month</h1>
+        <h1>Routines by Month for:</h1>
         <h2>
-          User id is {userId} {user.name}
+          User email: {user.email}
+        </h2>
+        <h2>
+          User Name:  {user.name},{user.lastname}
         </h2>
 
         <AddRoutineByMonth
