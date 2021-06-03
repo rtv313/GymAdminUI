@@ -10,6 +10,7 @@ import Button from "@material-ui/core/Button";
 import { SERVER_URL } from "./Constants.js";
 import { DataGrid } from "@material-ui/data-grid";
 import AddRoutineByMonth from "./AddRoutineByMonth";
+import EditRoutineByMonth from "./EditRoutineByMonth";
 import { ToastContainer, toast } from "react-toastify";
 
 const RoutineByMonth = (props) => {
@@ -26,13 +27,15 @@ const RoutineByMonth = (props) => {
       width: 160,
       renderCell: (params) => {
         return (
-          <Button
+          <EditRoutineByMonth
             variant="contained"
             color="primary"
             id={params.getValue("id")}
+            userId = {userId}
+            fetchRoutinesByMonth={wrapperFetchRoutines}
           >
             Edit
-          </Button>
+          </EditRoutineByMonth>
         );
       },
     },
@@ -73,6 +76,10 @@ const RoutineByMonth = (props) => {
       },
     },
   ]);
+
+  const wrapperFetchRoutines = () =>{
+    fetchRoutinesByMonth(responseDataPass);
+  }
 
   const setCoachUser = (value) => {
     value.coachUser = value.coachUser.email;
