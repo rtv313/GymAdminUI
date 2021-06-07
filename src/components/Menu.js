@@ -24,7 +24,7 @@ class Menu extends React.Component {
               <Route path="/exercises" component={() => <Exercises/>} />
               <Route path="/users" component={() => <Users/>} />
               <Route path="/routineByMonth/:userId" component={RoutineByMonth} />
-              <Route path="/routineByDay" component={RoutineByDay} />
+              <Route path="/routineByDay/:routineByMonthId/:userId" component={RoutineByDay} />
               <Route path="" component={Home} />
             </Switch>
           </div>
