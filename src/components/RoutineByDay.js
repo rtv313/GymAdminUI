@@ -20,7 +20,11 @@ class RoutineByDay extends React.Component {
       sortable: false,
       width: 160,
       renderCell: (params) => {
-        return <Button variant="contained" color="primary">Edit</Button>;
+        return (
+          <Button variant="contained" color="primary">
+            Edit
+          </Button>
+        );
       },
     },
     {
@@ -64,12 +68,44 @@ class RoutineByDay extends React.Component {
     super(props);
     this.routineByMonthId = props.match.params.routineByMonthId;
     this.userId = props.match.params.userId;
-    this.state = { routinesByDay: [] };
+    this.state = { routinesByDay: [], user: {}};
   }
 
   componentDidMount() {
     this.fetchRoutinesByDay();
+    this.getUserData(this.userId);
   }
+
+  getUserData = (id) => {
+    const token = "Bearer " + sessionStorage.getItem("accessToken");
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", token);
+    myHeaders.append("Content-Type", "application/json");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(SERVER_URL + "api/users/" + id, requestOptions)
+      .then((response) => {
+        if (response.status !== 200) {
+          toast.warn("Cannot get User", {
+            position: toast.POSITION.BOTTOM_LEFT,
+          });
+          return false;
+        }
+        return response;
+      })
+      .then((response) => response.json())
+      .then((responseData) => {
+        this.setState({ user: responseData });
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
+  };
 
   // Fetch all routinesByDay
   fetchRoutinesByDay = () => {
@@ -86,7 +122,13 @@ class RoutineByDay extends React.Component {
       redirect: "follow",
     };
 
-    fetch(SERVER_URL + "api/routinesByDayByRoutineByMonth" + "/" + this.routineByMonthId, requestOptions)
+    fetch(
+      SERVER_URL +
+        "api/routinesByDayByRoutineByMonth" +
+        "/" +
+        this.routineByMonthId,
+      requestOptions
+    )
       .then((response) => response.json())
       .then((responseData) => {
         this.setState({ routinesByDay: responseData });
@@ -118,7 +160,14 @@ class RoutineByDay extends React.Component {
             </Link>
           </Breadcrumbs>
 
-          <h1>Routines by Day</h1>
+          <h1>Routines by Day for:</h1>
+
+          <h2>User email: {this.state.user.email}</h2>
+          <h2>
+            User Name: {this.state.user.name},{this.state.user.lastname}
+          </h2>
+      
+
           <div style={{ height: 1000, width: "100%" }}>
             <DataGrid
               rows={this.state.routinesByDay}
