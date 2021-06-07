@@ -36,6 +36,7 @@ const AddRoutineByDay = (props) => {
         name: "",
         dayOfWeek: "",
       });
+      setDayOfWeek(DAY_OF_WEEK);
     }
   };
 
@@ -45,7 +46,6 @@ const AddRoutineByDay = (props) => {
 
   const handleClickOpen = () => {
     setOpen(true);
-    //fetchRoutinesByDay();
   };
 
   const handleClose = () => {
@@ -63,7 +63,16 @@ const AddRoutineByDay = (props) => {
   };
 
   const validateData = () => {
-    return true;
+    var valid = true;
+    if (routineByDay.name === "") {
+      setValidName(true);
+      setErrorNameMessage("This field cannot be empty");
+      valid = false;
+    } else {
+      setValidName(false);
+      setErrorNameMessage("");
+    }
+    return valid;
   };
 
   // Save RoutineByMonth
@@ -130,6 +139,9 @@ const AddRoutineByDay = (props) => {
             fullWidth
             label="Name"
             onChange={handleChange}
+            value={routineByDay.name}
+            error={validName}
+            helperText={errorNameMessage}
           />
         <br/><br/>
         <p>Select day of the week</p>
