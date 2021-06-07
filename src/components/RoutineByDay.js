@@ -8,7 +8,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { ToastContainer, toast } from "react-toastify";
 import { DataGrid } from "@material-ui/data-grid";
 import Button from "@material-ui/core/Button";
-
+import AddRoutineByDay from "./AddRoutineByDay";
 class RoutineByDay extends React.Component {
   columnsExercises = [
     { field: "name", headerName: "Name", width: 180 },
@@ -167,6 +167,7 @@ class RoutineByDay extends React.Component {
             User Name: {this.state.user.name},{this.state.user.lastname}
           </h2>
       
+          <AddRoutineByDay routineByMonthId = {this.routineByMonthId} fetchRoutinesByDay={this.fetchRoutinesByDay}/>
 
           <div style={{ height: 1000, width: "100%" }}>
             <DataGrid
