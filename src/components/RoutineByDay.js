@@ -52,7 +52,7 @@ class RoutineByDay extends React.Component {
       width: 160,
       renderCell: (params) => {
         const onClick = () => {
-          //this.deleteUser(params.getValue("id"));
+          this.deleteRoutineByDay(params.getValue("id"));
         };
 
         return (
@@ -106,6 +106,33 @@ class RoutineByDay extends React.Component {
         console.log("error", error);
       });
   };
+
+  deleteRoutineByDay(routineByDayId){
+
+    const token = "Bearer " + sessionStorage.getItem("accessToken");
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", token);
+    myHeaders.append("Content-Type", "application/json");
+
+    var requestOptions = {
+      method: 'DELETE',
+      headers: myHeaders,
+      redirect: 'follow'
+    };
+    
+    fetch(SERVER_URL + "api/routinesByDay/" + routineByDayId, requestOptions)
+      .then((response) => {
+        if(response.status !== 200){
+          toast.warn("Cannot delete Routine by day", {position: toast.POSITION.BOTTOM_LEFT}); 
+        }else{
+          toast.success("Routine by day deleted", {position: toast.POSITION.BOTTOM_LEFT}); 
+        }
+        return response.text();
+      })
+      .then(result => console.log(result))
+      .then(res => this.fetchRoutinesByDay())
+      .catch(error => console.log('error', error));
+  }
 
   // Fetch all routinesByDay
   fetchRoutinesByDay = () => {
