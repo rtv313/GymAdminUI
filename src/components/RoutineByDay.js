@@ -9,6 +9,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { DataGrid } from "@material-ui/data-grid";
 import Button from "@material-ui/core/Button";
 import AddRoutineByDay from "./AddRoutineByDay";
+import EditRoutineByDay from "./EditRoutineByDay";
 class RoutineByDay extends React.Component {
   columnsExercises = [
     { field: "name", headerName: "Name", width: 180 },
@@ -21,9 +22,7 @@ class RoutineByDay extends React.Component {
       width: 160,
       renderCell: (params) => {
         return (
-          <Button variant="contained" color="primary">
-            Edit
-          </Button>
+          <EditRoutineByDay  id={params.getValue("id")} fetchRoutinesByDay={this.fetchRoutinesByDay}  routineByMonthId = {this.routineByMonthId}/>
         );
       },
     },
