@@ -46,7 +46,8 @@ const RoutineByMonth = (props) => {
       sortable: false,
       width: 210,
       renderCell: (params) => {
-        var link = "/routineByDay/";
+      
+        var link = "/routineByDay/" + params.getValue("id") + "/" + userId;
         return (
           <Link to={link}>
             <Button variant="outlined" color="primary">
@@ -221,6 +222,8 @@ const RoutineByMonth = (props) => {
     getUserData(userId, true);
   }, []);
 
+  var routineByMonthLink = "/routineByMonth/" + userId;
+
   return (
     <div>
       <Container>
@@ -234,7 +237,7 @@ const RoutineByMonth = (props) => {
           <Link to="/users">
             <h1>Users</h1>
           </Link>
-          <Link to="/routineByMonth">
+          <Link to={routineByMonthLink}>
             <h1>RoutineByMonth</h1>
           </Link>
         </Breadcrumbs>
@@ -252,10 +255,6 @@ const RoutineByMonth = (props) => {
           responseData={responseDataPass}
           fetchRoutinesByMonth={fetchRoutinesByMonth}
         />
-
-        <Link to="/routineByDay">
-          <h1>Routine By Day</h1>
-        </Link>
 
         <div style={{ height: 1000, width: "100%" }}>
           <DataGrid
