@@ -14,6 +14,20 @@ import EditRoutineByDay from "./EditRoutineByDay";
 class ExercisesByDay extends React.Component {
 
   columnsExercises = [
+    {
+        field: "Exercise",
+        disableClickEventBubbling: true,
+        headerName: "Exercise",
+        description: "This column has a value getter and is not sortable.",
+        sortable: false,
+        width: 160,
+        renderCell: (params) => {
+          var exerciseName =  params.getValue("exercise");
+          return (
+              <h3>{exerciseName.name}</h3>
+          );
+        },
+      },
     { field: "series", headerName: "Series", width: 180 },
     { field: "repetitions", headerName: "Repetitions", width: 180 },
     { field: "durationInMinutes", headerName: "Duration In Minutes", width: 180 },
