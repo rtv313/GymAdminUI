@@ -10,69 +10,26 @@ import { DataGrid } from "@material-ui/data-grid";
 import Button from "@material-ui/core/Button";
 import AddRoutineByDay from "./AddRoutineByDay";
 import EditRoutineByDay from "./EditRoutineByDay";
-class RoutineByDay extends React.Component {
-  columnsExercises = [
-    { field: "name", headerName: "Name", width: 180 },
-    { field: "dayOfWeek", headerName: "Day of week", width: 180 },
-    {
-      field: "edit",
-      headerName: "Edit",
-      description: "This column has a value getter and is not sortable.",
-      sortable: false,
-      width: 160,
-      renderCell: (params) => {
-        return (
-          <EditRoutineByDay  id={params.getValue("id")} fetchRoutinesByDay={this.fetchRoutinesByDay}  routineByMonthId = {this.routineByMonthId}/>
-        );
-      },
-    },
-    {
-      field: "exercises",
-      headerName: "Exercises",
-      description: "This column has a value getter and is not sortable.",
-      sortable: false,
-      width: 210,
-      renderCell: (params) => {
-        var link = "/exercisesByDay/" + params.getValue("id") + "/" + this.routineByMonthId + "/" + this.userId;
-        return (
-          <Link to={link}>
-            <Button variant="outlined" color="primary">
-              Exercises
-            </Button>
-          </Link>
-        );
-      },
-    },
-    {
-      field: "delete",
-      disableClickEventBubbling: true,
-      headerName: "Delete",
-      description: "This column has a value getter and is not sortable.",
-      sortable: false,
-      width: 160,
-      renderCell: (params) => {
-        const onClick = () => {
-          this.deleteRoutineByDay(params.getValue("id"));
-        };
 
-        return (
-          <Button variant="contained" color="secondary" onClick={onClick}>
-            Delete
-          </Button>
-        );
-      },
-    },
+class ExercisesByDay extends React.Component {
+
+  columnsExercises = [
+    { field: "series", headerName: "Series", width: 180 },
+    { field: "repetitions", headerName: "Repetitions", width: 180 },
+    { field: "durationInMinutes", headerName: "Duration In Minutes", width: 180 },
+    { field: "note", headerName: "Note", width: 180 },
   ];
 
   constructor(props) {
     super(props);
+    this.routineByDayId = props.match.params.routineByDayId;
     this.routineByMonthId = props.match.params.routineByMonthId;
     this.userId = props.match.params.userId;
-    this.state = { routinesByDay: [], user: {}};
+    this.state = { exercisesByDay: [], user: {}};
   }
 
   componentDidMount() {
-    this.fetchRoutinesByDay();
+    this.fetchExercisesByDay();
     this.getUserData(this.userId);
   }
 
@@ -107,35 +64,10 @@ class RoutineByDay extends React.Component {
       });
   };
 
-  deleteRoutineByDay(routineByDayId){
 
-    const token = "Bearer " + sessionStorage.getItem("accessToken");
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", token);
-    myHeaders.append("Content-Type", "application/json");
-
-    var requestOptions = {
-      method: 'DELETE',
-      headers: myHeaders,
-      redirect: 'follow'
-    };
-    
-    fetch(SERVER_URL + "api/routinesByDay/" + routineByDayId, requestOptions)
-      .then((response) => {
-        if(response.status !== 200){
-          toast.warn("Cannot delete Routine by day", {position: toast.POSITION.BOTTOM_LEFT}); 
-        }else{
-          toast.success("Routine by day deleted", {position: toast.POSITION.BOTTOM_LEFT}); 
-        }
-        return response.text();
-      })
-      .then(result => console.log(result))
-      .then(res => this.fetchRoutinesByDay())
-      .catch(error => console.log('error', error));
-  }
 
   // Fetch all routinesByDay
-  fetchRoutinesByDay = () => {
+  fetchExercisesByDay = () => {
     // Read the token from the session storage
     // and include it to Authorization header
     const token = "Bearer " + sessionStorage.getItem("accessToken");
@@ -151,22 +83,21 @@ class RoutineByDay extends React.Component {
 
     fetch(
       SERVER_URL +
-        "api/routinesByDayByRoutineByMonth" +
+        "api/exercisesByDayByRoutineByDay" +
         "/" +
-        this.routineByMonthId,
+        this.routineByDayId,
       requestOptions
     )
       .then((response) => response.json())
       .then((responseData) => {
-        this.setState({ routinesByDay: responseData });
+        this.setState({ exercisesByDay: responseData });
       })
       .catch((err) => console.error(err));
   };
 
   render() {
     var routineByMonthLink = "/routineByMonth/" + this.routineByMonthId;
-    var routineByDayLink =
-      "/routineByDay/" + this.routineByMonthId + "/" + this.userId;
+    var routineByDayLink = "/routineByDay/" + this.routineByDayId + "/" + this.userId;
     return (
       <div>
         <Container>
@@ -185,9 +116,12 @@ class RoutineByDay extends React.Component {
             <Link to={routineByDayLink}>
               <h1>RoutineByDay</h1>
             </Link>
+            <Link to="">
+              <h1>Exercises by Day</h1>
+            </Link>
           </Breadcrumbs>
 
-          <h1>Routines by Day for:</h1>
+          <h1>Exercises for:</h1>
 
           <h2>User email: {this.state.user.email}</h2>
           <h2>
@@ -198,7 +132,7 @@ class RoutineByDay extends React.Component {
 
           <div style={{ height: 1000, width: "100%" }}>
             <DataGrid
-              rows={this.state.routinesByDay}
+              rows={this.state.exercisesByDay}
               columns={this.columnsExercises}
               pageSize={50}
             />
@@ -211,4 +145,4 @@ class RoutineByDay extends React.Component {
   }
 }
 
-export default RoutineByDay;
+export default ExercisesByDay;

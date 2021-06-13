@@ -6,6 +6,8 @@ import Users from './Users';
 import RoutineByMonth from './RoutineByMonth'
 import RoutineByDay from './RoutineByDay'
 import Home from './Home';
+import ExercisesByDay from './ExercisesByDay'
+
 
 class Menu extends React.Component {
 
@@ -25,6 +27,7 @@ class Menu extends React.Component {
               <Route path="/users" component={() => <Users/>} />
               <Route path="/routineByMonth/:userId" component={RoutineByMonth} />
               <Route path="/routineByDay/:routineByMonthId/:userId" component={RoutineByDay} />
+              <Route path="/exercisesByDay/:routineByDayId/:routineByMonthId/:userId" component={ExercisesByDay} />
               <Route path="" component={Home} />
             </Switch>
           </div>
