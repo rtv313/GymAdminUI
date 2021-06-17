@@ -135,10 +135,47 @@ const AddRoutineDayExercise = (props) => {
 
   // Save RoutineByMonth
   const handleSave = () => {
-    var jas = exerciseByDay;
-    var newvas = selectedExercise;
-  
-    validateData();
+    
+    if (validateData() === true){
+      const token = "Bearer " + sessionStorage.getItem("accessToken");
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", token);
+      myHeaders.append("Content-Type", "application/json");
+      var raw = JSON.stringify(exerciseByDay);
+
+      var requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+
+      var errorFlag = false;
+      fetch(SERVER_URL + "api/exercisesByDay/" + props.routineByDayId + "/" + selectedExercise.id,requestOptions)
+        .then((response) => {
+          if (response.status !== 201) {
+            errorFlag = true;
+          }
+          return response;
+        })
+        .then((response) => response.json())
+        .then((responseData) => {
+          if (errorFlag === true) {
+            toast.warn(responseData.message, {
+              position: toast.POSITION.BOTTOM_LEFT,
+            });
+          } else {
+            toast.success("Routine day exercise Created", {
+              position: toast.POSITION.BOTTOM_LEFT,
+            });
+            props.fetchExercisesByDay();
+          }
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
+      handleClose();
+    }
   };
 
   // Fetch all users and filter by coach users
