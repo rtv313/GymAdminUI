@@ -8,7 +8,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { ToastContainer, toast } from "react-toastify";
 import { DataGrid } from "@material-ui/data-grid";
 import Button from "@material-ui/core/Button";
-import AddRoutineByDay from "./AddRoutineByDay";
+import AddRoutineDayExercise from "./AddRoutineDayExercise";
 import EditRoutineByDay from "./EditRoutineByDay";
 
 class ExercisesByDay extends React.Component {
@@ -28,9 +28,9 @@ class ExercisesByDay extends React.Component {
           );
         },
       },
-    { field: "series", headerName: "Series", width: 180 },
-    { field: "repetitions", headerName: "Repetitions", width: 180 },
-    { field: "durationInMinutes", headerName: "Duration In Minutes", width: 180 },
+    { field: "series", headerName: "Series", width: 100 },
+    { field: "repetitions", headerName: "Repetitions", width: 150 },
+    { field: "durationInMinutes", headerName: "Duration(min)", width: 150 },
     { field: "note", headerName: "Note", width: 180 },
   ];
 
@@ -142,7 +142,7 @@ class ExercisesByDay extends React.Component {
             User Name: {this.state.user.name},{this.state.user.lastname}
           </h2>
       
-          <AddRoutineByDay routineByMonthId = {this.routineByMonthId} fetchRoutinesByDay={this.fetchRoutinesByDay}/>
+          <AddRoutineDayExercise routineByDayId = {this.routineByDayId} fetchExercisesByDay={this.fetchExercisesByDay}/>
 
           <div style={{ height: 1000, width: "100%" }}>
             <DataGrid

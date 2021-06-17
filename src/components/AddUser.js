@@ -40,8 +40,7 @@ const AddUser = (props) => {
 
   const [repeatPassword, setRepeatPassword] = useState("");
   const [validRepeatPassword, setValidRepeatPassword] = useState(false);
-  const [errorRepeatPasswordMessage, setErrorRepeatPasswordMessage] =
-    useState("");
+  const [errorRepeatPasswordMessage, setErrorRepeatPasswordMessage] = useState("");
 
   const handleClickOpen = () => {
     setOpen(true);
