@@ -8,22 +8,31 @@ import TextField from "@material-ui/core/TextField";
 import { DataGrid } from "@material-ui/data-grid";
 import { SERVER_URL } from "./Constants.js";
 import { toast } from "react-toastify";
-import EditExerciseImage from "./EditExerciseImage"
 
 const dateformat = require("dateformat");
 
 const AddRoutineDayExercise = (props) => {
   const [open, setOpen] = useState(false);
   const [exerciseByDay, setExeciseByDay] = useState({
-    series: "",
-    repetitions: "",
-    durationInMinutes: "",
+    series: "0",
+    repetitions: "0",
+    durationInMinutes: "0",
     note: "",
     exercise: {},
   });
 
   const [exercises, setExercises] = useState([]);
   const [selectedExercise, setSelectedExercise] = useState({});
+
+  const [validSeries, setValidSeries] = useState(false);
+  const [errorSeriesMessage, setErrorSeriesMessage] = useState("");
+
+  const [validRepetitions, setValidRepetitions] = useState(false);
+  const [errorRepetitionsMessage, setErrorRepetitionsMessage] = useState("");
+
+  const [validDurationInMinutes, setValidDurationInMinutes] = useState(false);
+  const [errorDurationInMinutessMessage, setErrorDurationInMinutesMessage] =
+    useState("");
 
   const [columnsExercises, setColumnsExercises] = useState([
     { field: "name", headerName: "Name", width: 130 },
@@ -48,10 +57,62 @@ const AddRoutineDayExercise = (props) => {
           </Button>
         );
       },
-    }
+    },
   ]);
 
-  const resetForm = (comeHandleChange) => {};
+  const resetForm = (comeHandleChange) => {
+    setValidSeries(false);
+    setErrorSeriesMessage("");
+
+    setValidRepetitions(false);
+    setErrorRepetitionsMessage("");
+
+    setValidDurationInMinutes(false);
+    setErrorDurationInMinutesMessage("");
+
+    if (comeHandleChange !== true) {
+      setExeciseByDay({
+        series: "0",
+        repetitions: "0",
+        durationInMinutes: "0",
+        note: "",
+        exercise: {},
+      });
+    }
+  };
+
+  const validateData = () => {
+    var valid = true;
+
+    if (exerciseByDay.series === "") {
+      setValidSeries(true);
+      setErrorSeriesMessage("This field cannot be empty");
+      valid = false;
+    } else {
+      setValidSeries(false);
+      setErrorSeriesMessage("");
+    }
+
+    if (exerciseByDay.repetitions === "") {
+      setValidRepetitions(true);
+      setErrorRepetitionsMessage("This field cannot be empty");
+      valid = false;
+    } else {
+      setValidRepetitions(false);
+      setErrorRepetitionsMessage("");
+    }
+
+    if (exerciseByDay.durationInMinutes === "") {
+      setValidDurationInMinutes(true);
+      setErrorDurationInMinutesMessage("This field cannot be empty");
+      valid = false;
+    } else {
+      setValidDurationInMinutes(false);
+      setErrorDurationInMinutesMessage("");
+    }
+
+    return valid;
+  };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -64,19 +125,20 @@ const AddRoutineDayExercise = (props) => {
   };
 
   const handleChange = (event) => {
-    setExeciseByDay({ ...exerciseByDay, [event.target.name]: event.target.value });
+    setExeciseByDay({
+      ...exerciseByDay,
+      [event.target.name]:
+        event.target.value < 0 ? (event.target.value = 0) : event.target.value,
+    });
     resetForm(true);
-  };
-
-  const validateData = () => {
-    var valid = true;
-
-    return valid;
   };
 
   // Save RoutineByMonth
   const handleSave = () => {
+    var jas = exerciseByDay;
     var newvas = selectedExercise;
+  
+    validateData();
   };
 
   // Fetch all users and filter by coach users
@@ -105,7 +167,7 @@ const AddRoutineDayExercise = (props) => {
   return (
     <div>
       <Button
-        variant="contained"
+        variant="outlined"
         color="primary"
         style={{ margin: 10 }}
         onClick={handleClickOpen}
@@ -116,48 +178,52 @@ const AddRoutineDayExercise = (props) => {
       <Dialog open={open} onClose={handleClose} fullScreen disableEnforceFocus>
         <DialogTitle> New Exercise by Day</DialogTitle>
         <DialogContent>
-
-           <TextField
+          <TextField
+            type={"number"}
             autoFocus
             fullWidth
             label="Series"
             name="series"
+            value={exerciseByDay.series}
             onChange={handleChange}
-            />
-
-           <TextField
+            error={validSeries}
+            helperText={errorSeriesMessage}
+          />
+          <TextField
+            type={"number"}
             autoFocus
             fullWidth
             label="Repetitions"
             name="repetitions"
+            value={exerciseByDay.repetitions}
             onChange={handleChange}
-            />
-
-           <TextField
+            error={validRepetitions}
+            helperText={errorRepetitionsMessage}
+          />
+          <TextField
+            type={"number"}
             autoFocus
             fullWidth
             label="Duration in Minutes"
             name="durationInMinutes"
+            value={exerciseByDay.durationInMinutes}
             onChange={handleChange}
-            />
-
-           <TextField
+            error={validDurationInMinutes}
+            helperText={errorDurationInMinutessMessage}
+          />
+          <TextField
             autoFocus
             fullWidth
             label="Note"
             name="note"
             onChange={handleChange}
-            />
-
+          />
           <br /> <br />
-
           <h4>
             Selected Exercise:
             {selectedExercise.name}
           </h4>
-
           <DataGrid rows={exercises} columns={columnsExercises} pageSize={15} />
-      
         </DialogContent>
 
         <DialogActions>
