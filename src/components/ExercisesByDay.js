@@ -32,6 +32,25 @@ class ExercisesByDay extends React.Component {
     { field: "repetitions", headerName: "Repetitions", width: 150 },
     { field: "durationInMinutes", headerName: "Duration(min)", width: 150 },
     { field: "note", headerName: "Note", width: 180 },
+    {
+      field: "delete",
+      disableClickEventBubbling: true,
+      headerName: "Delete",
+      description: "This column has a value getter and is not sortable.",
+      sortable: false,
+      width: 160,
+      renderCell: (params) => {
+        const onClick = () => {
+          this.deleteExerciseByDay(params.getValue("id"));
+        };
+
+        return (
+          <Button variant="contained" color="secondary" onClick={onClick}>
+            Delete
+          </Button>
+        );
+      },
+    }
   ];
 
   constructor(props) {
@@ -78,7 +97,38 @@ class ExercisesByDay extends React.Component {
       });
   };
 
+   deleteExerciseByDay= (exerciseByDayId) => {
+    const token = "Bearer " + sessionStorage.getItem("accessToken");
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", token);
+    myHeaders.append("Content-Type", "application/json");
 
+    var requestOptions = {
+      method: "DELETE",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(
+      SERVER_URL + "api/exercisesByDay/" + exerciseByDayId,
+      requestOptions
+    )
+      .then((response) => {
+        if (response.status !== 200) {
+          toast.warn("Cannot delete Exercise by day", {
+            position: toast.POSITION.BOTTOM_LEFT,
+          });
+        } else {
+          toast.success("Exercise by day deleted", {
+            position: toast.POSITION.BOTTOM_LEFT,
+          });
+        }
+        return response.text();
+      })
+      .then((result) => console.log(result))
+      .then((res) => this.fetchExercisesByDay())
+      .catch((error) => console.log("error", error));
+  };
 
   // Fetch all routinesByDay
   fetchExercisesByDay = () => {
