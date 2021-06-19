@@ -11,7 +11,7 @@ import { toast } from "react-toastify";
 
 const dateformat = require("dateformat");
 
-const AddRoutineDayExercise = (props) => {
+const EditRoutineDayExercise = (props) => {
   const [open, setOpen] = useState(false);
   const [exerciseByDay, setExeciseByDay] = useState({
     series: "0",
@@ -117,6 +117,7 @@ const AddRoutineDayExercise = (props) => {
   const handleClickOpen = () => {
     setOpen(true);
     fetchExercises();
+    getRoutineDayExercise();
   };
 
   const handleClose = () => {
@@ -133,7 +134,7 @@ const AddRoutineDayExercise = (props) => {
     resetForm(true);
   };
 
-  // Save AddRoutineDayExercise
+  // Save EditRoutineDayExercise
   const handleSave = () => {
     
     if (validateData() === true){
@@ -144,14 +145,14 @@ const AddRoutineDayExercise = (props) => {
       var raw = JSON.stringify(exerciseByDay);
 
       var requestOptions = {
-        method: "POST",
+        method: "PUT",
         headers: myHeaders,
         body: raw,
         redirect: "follow",
       };
 
       var errorFlag = false;
-      fetch(SERVER_URL + "api/exercisesByDay/" + props.routineByDayId + "/" + selectedExercise.id,requestOptions)
+      fetch(SERVER_URL + "api/exercisesByDay/" + props.id + "/" + props.routineByDayId + "/" + selectedExercise.id,requestOptions)
         .then((response) => {
           if (response.status !== 201) {
             errorFlag = true;
@@ -165,7 +166,7 @@ const AddRoutineDayExercise = (props) => {
               position: toast.POSITION.BOTTOM_LEFT,
             });
           } else {
-            toast.success("Routine day exercise Created", {
+            toast.success("Routine day exercise edited", {
               position: toast.POSITION.BOTTOM_LEFT,
             });
             props.fetchExercisesByDay();
@@ -201,15 +202,50 @@ const AddRoutineDayExercise = (props) => {
       .catch((err) => console.error(err));
   };
 
+  const getRoutineDayExercise = () => {
+    const token = "Bearer " + sessionStorage.getItem("accessToken");
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", token);
+    myHeaders.append("Content-Type", "application/json");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(SERVER_URL + "api/exercisesByDay/" + props.id, requestOptions)
+      .then((response) => {
+        if (response.status !== 200) {
+          toast.warn("Cannot get Routine Day Exercise", {
+            position: toast.POSITION.BOTTOM_LEFT,
+          });
+        } else {
+          toast.success("Get Routine Day Exercise data succesfully", {
+            position: toast.POSITION.BOTTOM_LEFT,
+          });
+        }
+        return response;
+      })
+      .then((response) => response.json())
+      .then((responseData) => {
+        setExeciseByDay(responseData);
+        setSelectedExercise(responseData.exercise);
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
+  }
+
   return (
     <div>
       <Button
-        variant="outlined"
+        variant="contained"
         color="primary"
         style={{ margin: 10 }}
         onClick={handleClickOpen}
       >
-        Add Exercise by Day
+        Edit
       </Button>
 
       <Dialog open={open} onClose={handleClose} fullScreen disableEnforceFocus>
@@ -253,6 +289,7 @@ const AddRoutineDayExercise = (props) => {
             fullWidth
             label="Note"
             name="note"
+            value={exerciseByDay.note}
             onChange={handleChange}
           />
           <br /> <br />
@@ -276,4 +313,4 @@ const AddRoutineDayExercise = (props) => {
   );
 };
 
-export default AddRoutineDayExercise;
+export default EditRoutineDayExercise;

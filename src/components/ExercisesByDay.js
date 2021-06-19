@@ -9,7 +9,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { DataGrid } from "@material-ui/data-grid";
 import Button from "@material-ui/core/Button";
 import AddRoutineDayExercise from "./AddRoutineDayExercise";
-import EditRoutineByDay from "./EditRoutineByDay";
+import EditRoutineDayExercise from "./EditRoutineDayExercise";
 
 class ExercisesByDay extends React.Component {
 
@@ -32,6 +32,26 @@ class ExercisesByDay extends React.Component {
     { field: "repetitions", headerName: "Repetitions", width: 150 },
     { field: "durationInMinutes", headerName: "Duration(min)", width: 150 },
     { field: "note", headerName: "Note", width: 180 },
+    {
+      field: "edit",
+      headerName: "Edit",
+      description: "This column has a value getter and is not sortable.",
+      sortable: false,
+      width: 160,
+      renderCell: (params) => {
+        return (
+          <EditRoutineDayExercise
+            variant="contained"
+            color="primary"
+            id={params.getValue("id")}
+            routineByDayId = {this.routineByDayId} 
+            fetchExercisesByDay={this.fetchExercisesByDay}
+          >
+            Edit
+          </EditRoutineDayExercise>
+        );
+      },
+    },
     {
       field: "delete",
       disableClickEventBubbling: true,
