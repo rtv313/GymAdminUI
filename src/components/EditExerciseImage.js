@@ -14,9 +14,14 @@ const EditExerciseImage = (props) => {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
+  const [urlImage,setUrlImage] = useState(null);
 
   const handleClickOpen = () => {
     setOpen(true);
+    setUrlImage(SERVER_URL + "api/uploads/img/" + props.url);
+    if( props.url === "Image_url" ){
+      setUrlImage(SERVER_URL + "api/uploads/img/" + "default_exercise.png");
+    }
   };
 
   const handleClose = () => {
@@ -94,7 +99,7 @@ const EditExerciseImage = (props) => {
             </Grid>
             <Grid item xs={12}>
               <img
-                src={SERVER_URL + "api/uploads/img/" + props.url}
+                src={urlImage}
                 width="300"
                 height="300"
               />
