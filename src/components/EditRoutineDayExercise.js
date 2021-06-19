@@ -9,7 +9,7 @@ import { DataGrid } from "@material-ui/data-grid";
 import { SERVER_URL } from "./Constants.js";
 import { toast } from "react-toastify";
 
-const dateformat = require("dateformat");
+
 
 const EditRoutineDayExercise = (props) => {
   const [open, setOpen] = useState(false);
