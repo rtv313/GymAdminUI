@@ -11,6 +11,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import DirectionsRunIcon from "@material-ui/icons/DirectionsRun";
+import PeopleIcon from '@material-ui/icons/People';
 
 class Home extends React.Component {
   constructor(props) {
@@ -49,6 +50,17 @@ class Home extends React.Component {
                 <ListItemText primary="Exercises" />
               </ListItem>
             </Link>
+
+            <Link to="/subscriptions">
+              <ListItem button>
+                <ListItemIcon>
+                  <PeopleIcon />
+                </ListItemIcon>
+                <ListItemText primary="Subscriptions" />
+              </ListItem>
+            </Link>
+
+
           </List>
         </Container>
       </div>
