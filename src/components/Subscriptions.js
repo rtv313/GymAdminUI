@@ -10,7 +10,7 @@ import Button from "@material-ui/core/Button";
 import Logout from "./Logout";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { DataGrid } from "@material-ui/data-grid";
-
+import AddSubscription from "./AddSubscription";
 
 
 class Subscriptions extends React.Component {
@@ -100,6 +100,8 @@ class Subscriptions extends React.Component {
             </Link>
           </Breadcrumbs>
           <h1>Subscriptions</h1>
+          <AddSubscription />
+          
           <div style={{ height: 400, width: "100%" }}>
           <DataGrid
             rows={this.state.subscriptions}
