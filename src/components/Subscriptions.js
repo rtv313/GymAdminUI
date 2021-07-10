@@ -28,7 +28,7 @@ class Subscriptions extends React.Component {
       renderCell: (params) => {
 
         const onClick = () => {
-          this.deleteExercise(params.getValue("id"));
+          this.deleteSubscription(params.getValue("id"));
          };
    
         return (
@@ -59,6 +59,32 @@ class Subscriptions extends React.Component {
     this.fetchSubscriptions();
   }
 
+  deleteSubscription = (subscriptionId) => {
+
+    const token = "Bearer " + sessionStorage.getItem("accessToken");
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", token);
+    myHeaders.append("Content-Type", "application/json");
+
+    var requestOptions = {
+      method: 'DELETE',
+      headers: myHeaders,
+      redirect: 'follow'
+    };
+    
+    fetch(SERVER_URL + "api/subscriptions/" + subscriptionId, requestOptions)
+      .then((response) => {
+        if(response.status !== 200){
+          toast.warn("Cannot delete subscription", {position: toast.POSITION.BOTTOM_LEFT}); 
+        }else{
+          toast.success("Subscription deleted", {position: toast.POSITION.BOTTOM_LEFT}); 
+        }
+        return response.text();
+      })
+      .then(result => console.log(result))
+      .then(res => this.fetchSubscriptions())
+      .catch(error => console.log('error', error));
+  }
  
   fetchSubscriptions = () => {
     // Read the token from the session storage
