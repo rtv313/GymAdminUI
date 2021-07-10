@@ -20,18 +20,47 @@ const AddSubscription = (props) => {
     { field: "email", headerName: "Email", width: 190 },
     { field: "name", headerName: "Name", width: 180 },
     { field: "lastname", headerName: "Lastname", width: 180 },
-    { field: "roles", headerName: "Role", width: 180 }
+    { field: "roles", headerName: "Role", width: 180 },
+    {
+      field: "setUser",
+      headerName: "Set User",
+      description: "This column has a value getter and is not sortable.",
+      sortable: false,
+      width: 160,
+
+      renderCell: (params) => {
+        const onClick = () => {
+          setSeletectUser(params.row);
+        };
+
+        return (
+          <Button variant="contained" color="primary" onClick={onClick}>
+            Set as user
+          </Button>
+        );
+      },
+    },
+    {
+      field: "setCoach",
+      headerName: "Set Coach",
+      description: "This column has a value getter and is not sortable.",
+      sortable: false,
+      width: 160,
+
+      renderCell: (params) => {
+        const onClick = () => {
+          setSeletectCoach(params.row);
+        };
+
+        return (
+          <Button variant="contained" color="primary" onClick={onClick}>
+            Set as coach
+          </Button>
+        );
+      },
+    }
   ];
   
-
-  const setUser = (user) => {
-    
-  };
-
-  const setCoach = (coach) => {
-    
-  };
-
   const handleClickOpen = () => {
     setOpen(true);
     fetchUsers();
@@ -41,25 +70,72 @@ const AddSubscription = (props) => {
     setOpen(false);
   };
 
-  const handleChange = (event) => {
-    
-  };
-
   const validateData = () => {
-    var valid = true;
-    return valid;
+
+    if(Object.entries(selectedUser).length === 0){
+      
+      alert("Please select a User");
+      return false;
+    }
+
+    if(Object.entries(selectedCoach).length === 0){
+      alert("Please select a Coach");
+      return false;
+    }
+    return true;
   };
 
   // Save RoutineByMonth
   const handleSave = () => {
    
+    if(validateData()===true){
+      const token = "Bearer " + sessionStorage.getItem("accessToken");
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", token);
+      myHeaders.append("Content-Type", "application/json");
+
+      var requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        redirect: "follow",
+      };
+
+      var errorFlag = false;
+      fetch( SERVER_URL + "api/subscriptions/" + selectedUser.id + "/" + selectedCoach.id,
+        requestOptions
+      ).then((response) => {
+          if (response.status !== 201) {
+            errorFlag = true;
+          }
+          return response;
+        })
+        .then((response) => response.json())
+        .then((responseData) => {
+          if (errorFlag === true) {
+            toast.warn(responseData.message, {
+              position: toast.POSITION.BOTTOM_LEFT,
+            });
+          } else {
+            toast.success("Subscription Created", {
+              position: toast.POSITION.BOTTOM_LEFT,
+            });
+            props.fetchSubscriptions();
+            setSeletectUser({});
+            setSeletectCoach({});
+          }
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
+      handleClose();
+    }
   };
 
   
 
-  // Fetch all users and filter by coach users
+  // Fetch all users 
   const fetchUsers = () => {
-      // Read the token from the session storage
+    // Read the token from the session storage
     // and include it to Authorization header
     const token = "Bearer " + sessionStorage.getItem("accessToken");
     var myHeaders = new Headers();
@@ -100,10 +176,10 @@ const AddSubscription = (props) => {
         <DialogTitle>  New Subscription </DialogTitle>
         <DialogContent>
           <h4>
-            Selected User:
+            Selected User: {selectedUser.email}
           </h4>
           <h4>
-            Selected Coach:
+            Selected Coach:{selectedCoach.email}
           </h4>
           <div style={{ height: 1000, width: "100%" }}>
             <DataGrid

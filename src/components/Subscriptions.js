@@ -100,7 +100,7 @@ class Subscriptions extends React.Component {
             </Link>
           </Breadcrumbs>
           <h1>Subscriptions</h1>
-          <AddSubscription />
+          <AddSubscription fetchSubscriptions={this.fetchSubscriptions} />
           
           <div style={{ height: 400, width: "100%" }}>
           <DataGrid
